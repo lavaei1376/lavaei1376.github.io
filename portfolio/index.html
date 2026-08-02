@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سعید لواعی — طراح گرافیک ارشد</title>
+<meta name="description" content="پورتفولیوی سعید لواعی، طراح گرافیک ارشد — هویت بصری، چاپ و طراحی دیجیتال">
+
+<style>
+/* =========================================================
+   FONT — Peyda Variable (single file, weight 100–950)
+   ========================================================= */
+@font-face {
+  font-family: 'Peyda';
+  src: url('assets/fonts/PeydaWebVF.woff2') format('woff2-variations'),
+       url('assets/fonts/PeydaWebVF.woff2') format('woff2');
+  font-weight: 100 950;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================================================
+   DESIGN TOKENS — derived from the locked Figma system
+   ========================================================= */
+:root {
+  /* Color */
+  --color-bg:            #F7F5F2; /* page background */
+  --color-surface:       #FCFBF9; /* cards, nav, placeholder fill */
+  --color-placeholder:   #F0EEEB; /* image/media placeholder field */
+  --color-text-primary:  #1B1B1B;
+  --color-text-secondary:#6C6C6C;
+  --color-text-muted:    #BFBAB4; /* row numbers, faint numerals */
+  --color-border:        #E7E3DD;
+  --color-black:         #111111; /* case-study hero backgrounds (intentional exception) */
+  --color-white:         #FFFFFF;
+
+  /* Type */
+  --font-main: 'Peyda', 'Vazirmatn', sans-serif;
+  --fs-display:    4rem;      /* 64px — hero name */
+  --fs-h1:         2.75rem;   /* 44px */
+  --fs-h2:         1.75rem;   /* 28px — project names */
+  --fs-body-lg:    1.125rem;  /* 18px */
+  --fs-body:       1rem;      /* 16px */
+  --fs-small:      0.875rem;  /* 14px */
+  --fs-caption:    0.8125rem; /* 13px — eyebrows, nav */
+  --fs-micro:      0.75rem;   /* 12px */
+  --fs-tiny:       0.625rem;  /* 10px */
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+
+  --lh-tight: 1.1;
+  --lh-normal: 1.5;
+  --lh-loose: 1.8;
+
+  /* Spacing scale (used for gaps, padding, section rhythm) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+  --sp-10: 140px;   /* default breathing room between major sections */
+  --sp-10-tight: 96px; /* reduced variant, e.g. list-style sections */
+
+  /* Radius */
+  --radius-lg: 16px;  /* hero/portrait placeholders */
+  --radius-md: 12px;  /* large gallery frames */
+  --radius-sm: 8px;   /* small gallery cells */
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 200ms;
+  --dur-base: 400ms;
+  --dur-slow: 700ms;
+
+  /* Layout */
+  --nav-h: 64px;
+  --content-max: 1440px;
+  --margin-x: 80px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-main);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+/* visible keyboard focus everywhere — accessibility floor */
+:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 3px;
+}
+
+.container {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+}
+
+/* =========================================================
+   NAV — fixed, shared across sections
+   ========================================================= */
+.nav {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: var(--nav-h);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 100;
+}
+.nav__inner {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav__logo {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+}
+.nav__links {
+  display: flex;
+  gap: var(--sp-5);
+  list-style: none;
+  margin: 0; padding: 0;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+}
+.nav__links a { transition: color var(--dur-fast) var(--ease-out); }
+.nav__links a:hover { color: var(--color-text-primary); }
+.nav__lang {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+  direction: ltr;
+}
+
+/* =========================================================
+   SECTION DIVIDER — the "breathing room" system
+   Reusable between every major section. Ghost-number gives
+   quiet wayfinding instead of being pure dead space.
+   Usage: place between two <section> elements.
+   ========================================================= */
+.section-divider {
+  position: relative;
+  height: var(--sp-10);
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.section-divider--tight { height: var(--sp-10-tight); }
+.section-divider--on-dark { background: var(--color-black); }
+.section-divider__ghost {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  opacity: 0.04;
+  letter-spacing: 0.02em;
+  user-select: none;
+  pointer-events: none;
+}
+.section-divider--on-dark .section-divider__ghost { color: var(--color-white); opacity: 0.06; }
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+  position: relative;
+  padding-top: var(--nav-h);
+  min-height: 900px;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+.hero__grid {
+  display: grid;
+  grid-template-columns: 48% 1px 1fr;
+  min-height: calc(900px - var(--nav-h));
+}
+
+/* left column — illustration placeholder */
+.hero__illu-col {
+  background: var(--color-placeholder);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-8);
+}
+.hero__illu-placeholder {
+  position: relative;
+  width: 380px;
+  height: 460px;
+  max-width: 100%;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+}
+.hero__crosshair-h,
+.hero__crosshair-v {
+  position: absolute;
+  background: var(--color-border);
+}
+.hero__crosshair-h { width: 40px; height: 1px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.hero__crosshair-v { width: 1px; height: 40px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.hero__illu-label {
+  margin-top: var(--sp-6);
+  font-size: var(--fs-small);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.hero__illu-caption {
+  font-size: var(--fs-tiny);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* center divider */
+.hero__col-divider { background: var(--color-border); }
+
+/* right column — identity + CTA */
+.hero__content-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--sp-8) var(--margin-x);
+  text-align: right;
+}
+.hero__eyebrow {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+}
+.hero__deco-line {
+  width: 40px; height: 1px;
+  background: var(--color-border);
+  margin: var(--sp-4) 0 var(--sp-4) auto;
+}
+.hero__name {
+  font-size: var(--fs-display);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  margin: 0;
+}
+.hero__position {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-regular);
+  color: var(--color-text-secondary);
+}
+.hero__sep {
+  width: 100%; max-width: 420px;
+  height: 1px; background: var(--color-border);
+  margin: var(--sp-6) 0 var(--sp-6) auto;
+}
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-6);
+  background: transparent;
+  border: 1px solid var(--color-text-primary);
+  border-radius: 999px;
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  margin-inline-start: auto;
+}
+.hero__cta:hover { background: var(--color-text-primary); color: var(--color-white); }
+.hero__cta-arrow { transition: transform var(--dur-fast) var(--ease-out); }
+.hero__cta:hover .hero__cta-arrow { transform: translateX(-4px); }
+
+.hero__stats {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-6);
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--color-border);
+  width: 100%;
+  max-width: 420px;
+  margin-inline-start: auto;
+}
+.hero__stat {
+  text-align: center;
+  position: relative;
+  padding-inline-start: var(--sp-6);
+}
+.hero__stat:first-child { padding-inline-start: 0; }
+.hero__stat:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0; top: 2px;
+  width: 1px; height: 32px;
+  background: var(--color-border);
+}
+.hero__stat-num {
+  display: block;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+}
+.hero__stat-label {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-caption);
+  color: var(--color-text-secondary);
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: var(--sp-6);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.hero__scroll-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+}
+.hero__scroll-label {
+  font-size: var(--fs-tiny);
+  color: var(--color-text-secondary);
+}
+
+/* =========================================================
+   SCROLL / LOAD REVEAL — respects reduced motion
+   ========================================================= */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+/* =========================================================
+   RESPONSIVE — placeholder breakpoint, full mobile pass is Stage 7
+   ========================================================= */
+@media (max-width: 900px) {
+  .hero__grid { grid-template-columns: 1fr; }
+  .hero__col-divider { display: none; }
+  .hero__illu-col { padding: var(--sp-6); min-height: 420px; }
+  .hero__content-col { text-align: center; align-items: center; padding: var(--sp-7) var(--sp-5); }
+  .hero__deco-line, .hero__sep, .hero__stats { margin-inline: auto; }
+  .hero__cta { margin-inline: auto; }
+  .nav__links { display: none; } /* mobile nav pattern TBD in Stage 7 */
+  :root { --margin-x: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav__inner">
+    <span class="nav__lang">FA&nbsp;&nbsp;/&nbsp;&nbsp;EN</span>
+    <ul class="nav__links">
+      <li><a href="#index">فهرست</a></li>
+      <li><a href="#about">درباره</a></li>
+      <li><a href="#about">تماس</a></li>
+    </ul>
+    <span class="nav__logo">SL</span>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero__grid">
+
+    <div class="hero__illu-col">
+      <div class="hero__illu-placeholder" data-reveal>
+        <div class="hero__crosshair-h"></div>
+        <div class="hero__crosshair-v"></div>
+        <div>
+          <p class="hero__illu-label">تصویرسازی شخصیت<br>(استاتیک یا متحرک)</p>
+          <p class="hero__illu-caption">میز کار · لپ‌تاپ · از پشت</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__col-divider"></div>
+
+    <div class="hero__content-col">
+      <p class="hero__eyebrow" data-reveal>طراح گرافیک ارشد</p>
+      <div class="hero__deco-line" data-reveal></div>
+      <h1 class="hero__name" data-reveal>سعید لواعی</h1>
+      <p class="hero__position" data-reveal>[ جمله معرفی — متن نهایی بعداً تعیین می‌شود ]</p>
+      <div class="hero__sep" data-reveal></div>
+      <a href="#index" class="hero__cta" data-reveal>
+        <span>مشاهده آثار</span>
+        <span class="hero__cta-arrow">←</span>
+      </a>
+      <div class="hero__stats" data-reveal>
+        <div class="hero__stat">
+          <span class="hero__stat-num">۷</span>
+          <span class="hero__stat-label">سال تجربه</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">۹</span>
+          <span class="hero__stat-label">پروژه در پورتفولیو</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">۴</span>
+          <span class="hero__stat-label">شرکت / برند</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll">
+    <span class="hero__scroll-dot"></span>
+    <span class="hero__scroll-label">اسکرول کنید</span>
+  </div>
+</section>
+
+<!--
+  Next up (Stage 2): .section-divider between Hero and Project Index.
+  The divider component and its "ghost number" pattern are already
+  defined above in CSS — usage once Project Index exists:
+
+  <div class="section-divider">
+    <span class="section-divider__ghost">۰۱</span>
+  </div>
+-->
+
+<script>
+// Reveal-on-load for hero (orchestrated, staggered)
+document.addEventListener('DOMContentLoaded', () => {
+  const heroReveals = document.querySelectorAll('.hero [data-reveal]');
+  heroReveals.forEach((el, i) => {
+    setTimeout(() => el.classList.add('is-visible'), 80 * i);
+  });
+});
+
+// Reusable scroll-reveal observer for future sections (Stage 2+)
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('[data-reveal]:not(.hero [data-reveal])').forEach(el => {
+  revealObserver.observe(el);
+});
+</script>
+
+</body>
+</html>
