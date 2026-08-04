@@ -151,11 +151,11 @@ a { color: inherit; text-decoration: none; }
   direction: ltr;
 }
 .nav__logo {
-  font-size: var(--fs-body);
-  font-weight: var(--fw-bold);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  color: var(--color-text-primary);
 }
+.nav__logo svg { height: 28px; width: auto; }
 .nav__links {
   display: flex;
   gap: var(--sp-5);
@@ -215,55 +215,26 @@ a { color: inherit; text-decoration: none; }
 }
 .hero__grid {
   display: grid;
-  grid-template-columns: 48% 1px 1fr;
+  grid-template-columns: 48% 1fr;
   min-height: calc(900px - var(--nav-h));
-  /* Lock physical column order (illustration left, text right) — RTL grid
+  /* Lock physical column order (video left, text right) — RTL grid
      would otherwise reverse DOM order and swap these two columns. */
   direction: ltr;
 }
 
-/* left column — illustration placeholder */
+/* left column — character video, flush edge-to-edge */
 .hero__illu-col {
-  background: var(--color-placeholder);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--sp-8);
-}
-.hero__illu-placeholder {
   position: relative;
-  width: 380px;
-  height: 460px;
-  max-width: 100%;
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--sp-4);
+  background: var(--color-black);
+  overflow: hidden;
 }
-.hero__crosshair-h,
-.hero__crosshair-v {
+.hero__video {
   position: absolute;
-  background: var(--color-border);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-.hero__crosshair-h { width: 40px; height: 1px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-.hero__crosshair-v { width: 1px; height: 40px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-.hero__illu-label {
-  margin-top: var(--sp-6);
-  font-size: var(--fs-small);
-  color: var(--color-text-secondary);
-  text-align: center;
-}
-.hero__illu-caption {
-  font-size: var(--fs-tiny);
-  color: var(--color-text-secondary);
-  text-align: center;
-}
-
-/* center divider */
-.hero__col-divider { background: var(--color-border); }
 
 /* right column — identity + CTA */
 .hero__content-col {
@@ -281,9 +252,9 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.05em;
 }
 .hero__deco-line {
-  width: 40px; height: 1px;
+  width: 100%; max-width: 260px; height: 1px;
   background: var(--color-border);
-  margin: var(--sp-4) 0 var(--sp-4) auto;
+  margin: var(--sp-2) 0 0 auto;
 }
 .hero__name {
   font-size: var(--fs-display);
@@ -291,16 +262,14 @@ a { color: inherit; text-decoration: none; }
   line-height: var(--lh-tight);
   margin: 0;
 }
-.hero__position {
-  margin-top: var(--sp-4);
-  font-size: var(--fs-body-lg);
+.hero__bio {
+  margin-top: var(--sp-5);
+  max-width: 460px;
+  margin-inline-start: auto;
+  font-size: var(--fs-body);
   font-weight: var(--fw-regular);
+  line-height: var(--lh-loose);
   color: var(--color-text-secondary);
-}
-.hero__sep {
-  width: 100%; max-width: 420px;
-  height: 1px; background: var(--color-border);
-  margin: var(--sp-6) 0 var(--sp-6) auto;
 }
 .hero__cta {
   display: inline-flex;
@@ -314,35 +283,24 @@ a { color: inherit; text-decoration: none; }
   font-weight: var(--fw-medium);
   color: var(--color-text-primary);
   transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  margin-top: var(--sp-6);
   margin-inline-start: auto;
 }
 .hero__cta:hover { background: var(--color-text-primary); color: var(--color-white); }
-.hero__cta-arrow { transition: transform var(--dur-fast) var(--ease-out); }
-.hero__cta:hover .hero__cta-arrow { transform: translateX(-4px); }
+.hero__cta-arrow { display: inline-flex; transition: transform var(--dur-fast) var(--ease-out); }
+.hero__cta:hover .hero__cta-arrow { transform: translateY(3px); }
 
 .hero__stats {
   display: flex;
   justify-content: flex-end;
-  gap: var(--sp-6);
-  margin-top: var(--sp-7);
-  padding-top: var(--sp-6);
-  border-top: 1px solid var(--color-border);
+  gap: var(--sp-7);
+  margin-top: var(--sp-6);
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   margin-inline-start: auto;
 }
 .hero__stat {
   text-align: center;
-  position: relative;
-  padding-inline-start: var(--sp-6);
-}
-.hero__stat:first-child { padding-inline-start: 0; }
-.hero__stat:not(:first-child)::before {
-  content: '';
-  position: absolute;
-  inset-inline-start: 0; top: 2px;
-  width: 1px; height: 32px;
-  background: var(--color-border);
 }
 .hero__stat-num {
   display: block;
@@ -353,26 +311,6 @@ a { color: inherit; text-decoration: none; }
   display: block;
   margin-top: var(--sp-2);
   font-size: var(--fs-caption);
-  color: var(--color-text-secondary);
-}
-
-.hero__scroll {
-  position: absolute;
-  bottom: var(--sp-6);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sp-2);
-}
-.hero__scroll-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--color-text-primary);
-}
-.hero__scroll-label {
-  font-size: var(--fs-tiny);
   color: var(--color-text-secondary);
 }
 
@@ -397,10 +335,9 @@ a { color: inherit; text-decoration: none; }
    ========================================================= */
 @media (max-width: 900px) {
   .hero__grid { grid-template-columns: 1fr; }
-  .hero__col-divider { display: none; }
-  .hero__illu-col { padding: var(--sp-6); min-height: 420px; }
+  .hero__illu-col { min-height: 420px; }
   .hero__content-col { text-align: center; align-items: center; padding: var(--sp-7) var(--sp-5); }
-  .hero__deco-line, .hero__sep, .hero__stats { margin-inline: auto; }
+  .hero__deco-line, .hero__bio, .hero__stats { margin-inline: auto; }
   .hero__cta { margin-inline: auto; }
   .nav__links { display: none; } /* mobile nav pattern TBD in Stage 7 */
   :root { --margin-x: 24px; }
@@ -414,11 +351,16 @@ a { color: inherit; text-decoration: none; }
   <div class="nav__inner">
     <span class="nav__lang">FA&nbsp;&nbsp;/&nbsp;&nbsp;EN</span>
     <ul class="nav__links">
+      <li><a href="#hero">خانه</a></li>
       <li><a href="#index">فهرست</a></li>
-      <li><a href="#about">درباره</a></li>
-      <li><a href="#about">تماس</a></li>
+      <li><a href="#about">درباره من</a></li>
     </ul>
-    <span class="nav__logo">SL</span>
+    <a href="#hero" class="nav__logo" aria-label="سعید لواعی — صفحه اصلی">
+      <svg viewBox="0 0 175.01 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100,12.5V61.24c0,35.21-28.55,63.76-63.76,63.76h-3.23C14.78,125,0,139.78,0,158.02v29.48c0,6.9,5.6,12.5,12.5,12.5h0c6.9,0,12.5-5.6,12.5-12.5v-25c0-6.9,5.6-12.5,12.5-12.5h0c6.91,0,12.5,5.6,12.5,12.5v1.88c0,19.67,15.94,35.61,35.61,35.61h1.9c6.9,0,12.5-5.6,12.5-12.5h0c0-6.9-5.6-12.5-12.5-12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.91,5.6-12.5,12.5-12.5h50c6.9,0,12.5,5.6,12.5,12.5h0c0,6.91-5.6,12.5-12.5,12.5h0c-6.9,0-12.5,5.6-12.5,12.5h0c0,6.9,5.6,12.5,12.5,12.5h0c20.71,0,37.5-16.79,37.5-37.5h0c0-20.71-16.79-37.5-37.5-37.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9,5.6-12.5,12.5-12.5h25.01c6.9,0,12.5-5.6,12.5-12.5h0c0-6.91-5.6-12.5-12.5-12.5h-25.01c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.91,5.6-12.5,12.5-12.5h25.01c6.9,0,12.5-5.6,12.5-12.5h0c0-6.91-5.6-12.5-12.5-12.5h-25.01c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9-5.59-12.49-12.49-12.5h0c-6.9,0-12.5,5.59-12.5,12.5Z"/>
+        <path d="M75,62.5V12.5c0-6.9-5.6-12.5-12.5-12.5h0c-6.9,0-12.5,5.6-12.5,12.5h0c0,6.9-5.6,12.5-12.5,12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0C25,5.6,19.41,0,12.5,0h0C5.6,0,0,5.6,0,12.5V62.5c0,20.71,16.79,37.5,37.5,37.5h0c20.71,0,37.5-16.79,37.5-37.5Zm-37.5-12.5h0c6.9,0,12.5,5.6,12.5,12.5h0c0,6.91-5.6,12.5-12.5,12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9,5.6-12.5,12.5-12.5Z"/>
+      </svg>
+    </a>
   </div>
 </nav>
 
@@ -427,28 +369,14 @@ a { color: inherit; text-decoration: none; }
   <div class="hero__grid">
 
     <div class="hero__illu-col">
-      <div class="hero__illu-placeholder" data-reveal>
-        <div class="hero__crosshair-h"></div>
-        <div class="hero__crosshair-v"></div>
-        <div>
-          <p class="hero__illu-label">تصویرسازی شخصیت<br>(استاتیک یا متحرک)</p>
-          <p class="hero__illu-caption">میز کار · لپ‌تاپ · از پشت</p>
-        </div>
-      </div>
+      <video class="hero__video" src="assets/video/hero-character.mp4" autoplay muted loop playsinline data-reveal></video>
     </div>
-
-    <div class="hero__col-divider"></div>
 
     <div class="hero__content-col">
       <p class="hero__eyebrow" data-reveal>طراح گرافیک ارشد</p>
       <div class="hero__deco-line" data-reveal></div>
       <h1 class="hero__name" data-reveal>سعید لواعی</h1>
-      <p class="hero__position" data-reveal>[ جمله معرفی — متن نهایی بعداً تعیین می‌شود ]</p>
-      <div class="hero__sep" data-reveal></div>
-      <a href="#index" class="hero__cta" data-reveal>
-        <span>مشاهده آثار</span>
-        <span class="hero__cta-arrow">←</span>
-      </a>
+      <p class="hero__bio" data-reveal>[ متن معرفی کوتاه — ۳ تا ۴ خط. توضیح مختصر درباره رویکرد طراحی، تخصص و نقاط تمایز. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
       <div class="hero__stats" data-reveal>
         <div class="hero__stat">
           <span class="hero__stat-num">۷</span>
@@ -463,12 +391,11 @@ a { color: inherit; text-decoration: none; }
           <span class="hero__stat-label">شرکت / برند</span>
         </div>
       </div>
+      <a href="#index" class="hero__cta" data-reveal>
+        <span>برو بریم</span>
+        <span class="hero__cta-arrow">↓</span>
+      </a>
     </div>
-  </div>
-
-  <div class="hero__scroll">
-    <span class="hero__scroll-dot"></span>
-    <span class="hero__scroll-label">اسکرول کنید</span>
   </div>
 </section>
 
