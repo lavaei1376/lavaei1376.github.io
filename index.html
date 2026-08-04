@@ -217,8 +217,6 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: 48% 1fr;
   min-height: calc(900px - var(--nav-h));
-  max-width: var(--content-max);
-  margin-inline: auto;
   /* Lock physical column order (video left, text right) — RTL grid
      would otherwise reverse DOM order and swap these two columns. */
   direction: ltr;
@@ -243,7 +241,12 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: var(--sp-8) var(--margin-x);
+  padding-block: var(--sp-8);
+  padding-inline-end: var(--margin-x);
+  /* Right edge (physical) matches nav's right edge exactly at any viewport
+     width: margin-x normally, or the nav's centered-column inset once the
+     viewport exceeds content-max. Video column stays full-bleed regardless. */
+  padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
   text-align: right;
   direction: rtl; /* restore RTL context for this column's own layout/logical properties */
 }
