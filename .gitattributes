@@ -1,0 +1,17 @@
+# Force these file types to always be treated as binary.
+# Prevents Git/GitHub Desktop from applying text/line-ending conversion
+# (autocrlf) on Windows, which can silently corrupt binary files on commit.
+
+*.mp4   binary
+*.mov   binary
+*.webm  binary
+*.woff2 binary
+*.woff  binary
+*.ttf   binary
+*.otf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.gif   binary
+*.svg   text eol=lf
