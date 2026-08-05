@@ -345,6 +345,194 @@ a { color: inherit; text-decoration: none; }
   .nav__links { display: none; } /* mobile nav pattern TBD in Stage 7 */
   :root { --margin-x: 24px; }
 }
+
+/* =========================================================
+   PLACEHOLDER — generic media placeholder (crosshair + label)
+   Used until real assets arrive. Two variants: on light surfaces
+   (default) and on dark sections (--on-dark).
+   ========================================================= */
+.placeholder {
+  position: relative;
+  background: var(--color-placeholder);
+  border: 1px dashed var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.placeholder::before, .placeholder::after {
+  content: "";
+  position: absolute;
+  background: var(--color-border);
+}
+.placeholder::before { top: 0; bottom: 0; left: 50%; width: 1px; }
+.placeholder::after   { left: 0; right: 0; top: 50%; height: 1px; }
+.placeholder__label {
+  position: relative;
+  z-index: 1;
+  font-size: var(--fs-micro);
+  color: var(--color-text-secondary);
+  background: var(--color-placeholder);
+  padding: var(--sp-1) var(--sp-2);
+  text-align: center;
+}
+.placeholder--on-dark {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.18);
+}
+.placeholder--on-dark::before, .placeholder--on-dark::after { background: rgba(255,255,255,0.18); }
+.placeholder--on-dark .placeholder__label {
+  color: rgba(255,255,255,0.55);
+  background: transparent;
+}
+
+/* =========================================================
+   PROJECT INDEX
+   ========================================================= */
+.project-index { background: var(--color-bg); }
+
+/* --- header band (black, full-width editorial entry) --- */
+.index-header {
+  display: grid;
+  grid-template-columns: 44% 1fr;
+  height: 240px;
+  background: var(--color-black);
+  /* Lock physical order (media left, text right) — see Section 6a pattern */
+  direction: ltr;
+}
+.index-header__media {
+  margin: var(--sp-6);
+  height: calc(100% - var(--sp-6) * 2);
+}
+.index-header__content {
+  direction: rtl; /* restore RTL for text + logical spacing */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: right;
+  padding-inline-end: var(--margin-x);
+  padding-inline-start: var(--sp-6);
+}
+.index-header__eyebrow {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.7);
+}
+.index-header__count {
+  font-size: 3.5rem; /* 56px */
+  font-weight: var(--fw-bold);
+  color: var(--color-white);
+  line-height: var(--lh-tight);
+  margin-top: var(--sp-2);
+}
+.index-header__desc {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-small);
+  color: rgba(255,255,255,0.55);
+  max-width: 360px;
+}
+.index-header__border {
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* --- row list --- */
+.index-row {
+  display: block;
+  position: relative;
+  height: 96px;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  overflow: hidden;
+  transition: background var(--dur-base) var(--ease-out);
+}
+.index-row:hover, .index-row:focus-visible { background: #EFECE8; }
+.index-row.is-flash { background: var(--color-black); transition: background var(--dur-fast) linear; }
+
+.index-row__thumb {
+  position: absolute;
+  inset-block: 0;
+  left: 0; /* physical left, matches locked spec regardless of RTL */
+  width: 0;
+  transition: width var(--dur-base) var(--ease-out);
+  z-index: 1;
+}
+.index-row:hover .index-row__thumb { width: 220px; }
+.index-row__thumb .placeholder { width: 100%; height: 100%; border-width: 0 1px 0 0; }
+
+.index-row__inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* natural RTL order: name-block first (renders right) → categories → arrow (renders left) */
+}
+.index-row__name-block {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  flex-direction: row-reverse; /* number sits tight to the right of the name */
+}
+.index-row__num {
+  font-size: var(--fs-caption);
+  color: var(--color-text-muted);
+  font-weight: var(--fw-medium);
+}
+.index-row__name {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  transition: font-size var(--dur-base) var(--ease-out);
+}
+.index-row:hover .index-row__name { font-size: 2rem; /* 32px */ }
+
+.index-row__categories {
+  font-size: var(--fs-small);
+  color: var(--color-text-secondary);
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.index-row:hover .index-row__categories { opacity: 0.6; }
+
+.index-row__arrow {
+  display: inline-flex;
+  color: var(--color-border);
+  transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+}
+.index-row:hover .index-row__arrow { color: var(--color-text-primary); transform: translateX(-6px); }
+
+/* --- footer --- */
+.index-footer {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-block: var(--sp-5);
+  display: flex;
+  justify-content: space-between;
+  /* Lock physical order (year left, count right) — see Section 6a pattern */
+  direction: ltr;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+.index-footer span { direction: rtl; unicode-bidi: isolate; }
+
+@media (max-width: 900px) {
+  .index-header { grid-template-columns: 1fr; height: auto; }
+  .index-header__media { display: none; } /* full mobile pass is Stage 7 */
+  .index-header__content { align-items: flex-end; padding: var(--sp-6) var(--sp-5); }
+  .index-header__count { font-size: 2.5rem; }
+  .index-row__thumb { display: none; } /* hover thumbnail is a desktop-only affordance */
+  .index-row__inner { padding-inline: var(--sp-5); }
+  .index-row__name { font-size: var(--fs-h2) !important; }
+  .index-row__categories { display: none; } /* reintroduce as secondary line in Stage 7 mobile pass */
+}
 </style>
 </head>
 <body>
@@ -402,15 +590,36 @@ a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
-<!--
-  Next up (Stage 2): .section-divider between Hero and Project Index.
-  The divider component and its "ghost number" pattern are already
-  defined above in CSS — usage once Project Index exists:
+<div class="section-divider">
+  <span class="section-divider__ghost">۰۱</span>
+</div>
 
-  <div class="section-divider">
-    <span class="section-divider__ghost">۰۱</span>
+<!-- ============ PROJECT INDEX ============ -->
+<section class="project-index" id="index">
+
+  <div class="index-header">
+    <div class="index-header__media">
+      <div class="placeholder placeholder--on-dark" style="width:100%;height:100%;">
+        <span class="placeholder__label">تصویر هدر<br>Header Image</span>
+      </div>
+    </div>
+    <div class="index-header__content">
+      <span class="index-header__eyebrow">آثار انتخابی</span>
+      <span class="index-header__count">۰۹ پروژه</span>
+      <!-- PLACEHOLDER COPY — not approved, see handoff notes -->
+      <p class="index-header__desc">نه پروژه منتخب از هفت سال طراحی هویت بصری، چاپ و کمپین دیجیتال</p>
+    </div>
   </div>
--->
+  <div class="index-header__border"></div>
+
+  <div class="index-list" id="index-list"></div>
+
+  <div class="index-footer">
+    <span>۱۳۹۷ — ۱۴۰۵</span>
+    <span>۰۹ پروژه</span>
+  </div>
+
+</section>
 
 <script>
 // Reveal-on-load for hero (orchestrated, staggered)
@@ -434,6 +643,57 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('[data-reveal]:not(.hero [data-reveal])').forEach(el => {
   revealObserver.observe(el);
 });
+
+/* =========================================================
+   PROJECT INDEX — data-driven row list
+   This same array will later feed the case-study "Prev/Next"
+   navigation (Stage 3) — single source of truth, not duplicated.
+   PLACEHOLDER: category tags are a draft, not confirmed copy —
+   flagged in handoff for Saeed's review.
+   ========================================================= */
+const PROJECTS = [
+  { num: '۰۱', name: 'VAMCO', cats: 'هویت بصری · راهنمای برند', href: '#' },
+  { num: '۰۲', name: 'TFIT', cats: 'اپلیکیشن · شبکه‌های اجتماعی · نمایشگاه', href: '#' },
+  { num: '۰۳', name: 'Boolooz', cats: 'کمپین دیجیتال · بنر', href: '#' },
+  { num: '۰۴', name: 'استودیو صنعت شریف — خودرو', cats: 'چاپ · بیلبورد · کاتالوگ', href: '#' },
+  { num: '۰۵', name: 'استودیو صنعت شریف — داخلی', cats: 'هویت بصری · پورتفولیو', href: '#' },
+  { num: '۰۶', name: 'تاریس', cats: 'نام‌گذاری · هویت بصری · اینستاگرام', href: '#' },
+  { num: '۰۷', name: 'نوین آرمه', cats: 'لوگو · هویت بصری', href: '#' },
+  { num: '۰۸', name: 'Sitpet', cats: 'بسته‌بندی · هویت برند', href: '#' },
+  { num: '۰۹', name: 'Coli Café', cats: 'لوگو', href: '#' },
+];
+
+const listEl = document.getElementById('index-list');
+PROJECTS.forEach((p, i) => {
+  const row = document.createElement('a');
+  row.href = p.href;
+  row.className = 'index-row';
+  row.setAttribute('data-reveal', '');
+  row.style.transitionDelay = (i * 60) + 'ms';
+  row.innerHTML = `
+    <div class="index-row__thumb"><div class="placeholder" style="width:100%;height:100%;"><span class="placeholder__label">پیش‌نمایش</span></div></div>
+    <div class="index-row__inner">
+      <div class="index-row__name-block">
+        <span class="index-row__num">${p.num}</span>
+        <span class="index-row__name">${p.name}</span>
+      </div>
+      <span class="index-row__categories">${p.cats}</span>
+      <span class="index-row__arrow">←</span>
+    </div>
+  `;
+  // Click-flash — visual confirmation only for now; real case-study
+  // navigation gets wired in as Stage 3 pages exist.
+  row.addEventListener('click', (e) => {
+    if (p.href === '#') {
+      e.preventDefault();
+      row.classList.add('is-flash');
+      setTimeout(() => row.classList.remove('is-flash'), 150);
+    }
+  });
+  listEl.appendChild(row);
+});
+
+document.querySelectorAll('#index-list [data-reveal]').forEach(el => revealObserver.observe(el));
 </script>
 
 </body>
