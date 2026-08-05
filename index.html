@@ -241,6 +241,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start; /* cross-axis start = right, under this column's rtl context */
   padding-block: var(--sp-8);
   padding-inline-end: var(--margin-x);
   /* Right edge (physical) matches nav's right edge exactly at any viewport
@@ -270,7 +271,6 @@ a { color: inherit; text-decoration: none; }
 .hero__bio {
   margin-top: var(--sp-5);
   max-width: 460px;
-  margin-inline-start: auto;
   font-size: var(--fs-body);
   font-weight: var(--fw-regular);
   line-height: var(--lh-loose);
@@ -289,7 +289,6 @@ a { color: inherit; text-decoration: none; }
   color: var(--color-text-primary);
   transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
   margin-top: var(--sp-6);
-  margin-inline-start: auto;
 }
 .hero__cta:hover { background: var(--color-text-primary); color: var(--color-white); }
 .hero__cta-arrow { display: inline-flex; transition: transform var(--dur-fast) var(--ease-out); }
@@ -297,12 +296,11 @@ a { color: inherit; text-decoration: none; }
 
 .hero__stats {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: var(--sp-7);
   margin-top: var(--sp-6);
   width: 100%;
   max-width: 460px;
-  margin-inline-start: auto;
 }
 .hero__stat {
   text-align: center;
