@@ -425,15 +425,25 @@ a { color: inherit; text-decoration: none; }
 /* --- header band (black, full-width editorial entry) --- */
 .index-header {
   display: grid;
-  grid-template-columns: 44% 1fr;
+  grid-template-columns: 48% 1fr; /* widened from 44%, matches Saeed's Figma redesign */
   height: 240px;
   background: var(--color-black);
+  overflow: hidden;
   /* Lock physical order (media left, text right) — see Section 6a pattern */
   direction: ltr;
 }
 .index-header__media {
-  margin: var(--sp-6);
-  height: calc(100% - var(--sp-6) * 2);
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+.index-header__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%; /* keeps the character's face/speech-bubble in frame rather than centering blindly */
 }
 .index-header__content {
   direction: rtl; /* restore RTL for text + logical spacing */
@@ -455,21 +465,14 @@ a { color: inherit; text-decoration: none; }
   padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
   padding-inline-end: var(--sp-6);
 }
-.index-header__eyebrow {
-  font-size: var(--fs-caption);
-  font-weight: var(--fw-medium);
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.7);
-}
-.index-header__count {
-  font-size: 3.5rem; /* 56px */
+.index-header__title {
+  font-size: var(--fs-h1);
   font-weight: var(--fw-bold);
   color: var(--color-white);
   line-height: var(--lh-tight);
-  margin-top: var(--sp-2);
 }
 .index-header__desc {
-  margin-top: var(--sp-2);
+  margin-top: var(--sp-3);
   font-size: var(--fs-small);
   color: rgba(255,255,255,0.55);
   max-width: 360px;
@@ -568,7 +571,7 @@ a { color: inherit; text-decoration: none; }
   .index-header { grid-template-columns: 1fr; height: auto; }
   .index-header__media { display: none; } /* full mobile pass is Stage 7 */
   .index-header__content { align-items: flex-end; padding: var(--sp-6) var(--sp-5); }
-  .index-header__count { font-size: 2.5rem; }
+  .index-header__title { font-size: 2.25rem; }
   .index-row__thumb { display: none; } /* hover thumbnail is a desktop-only affordance */
   .index-row__inner { padding-inline: var(--sp-5); }
   .index-row__name { font-size: var(--fs-h2) !important; }
@@ -638,14 +641,10 @@ a { color: inherit; text-decoration: none; }
 
   <div class="index-header">
     <div class="index-header__media">
-      <div class="placeholder placeholder--on-dark" style="width:100%;height:100%;">
-        <span class="placeholder__label">تصویر هدر<br>Header Image</span>
-      </div>
+      <img src="assets/img/index-projects-header.webp" alt="">
     </div>
     <div class="index-header__content">
-      <span class="index-header__eyebrow">آثار انتخابی</span>
-      <span class="index-header__count">۰۹ پروژه</span>
-      <!-- PLACEHOLDER COPY — not approved, see handoff notes -->
+      <span class="index-header__title">پروژه‌ها</span>
       <p class="index-header__desc">نه پروژه منتخب از هفت سال طراحی هویت بصری، چاپ و کمپین دیجیتال</p>
     </div>
   </div>
@@ -655,7 +654,7 @@ a { color: inherit; text-decoration: none; }
 
   <div class="index-footer">
     <span>۱۳۹۷ — ۱۴۰۵</span>
-    <span>۰۹ پروژه</span>
+    <span>۹ پروژه</span>
   </div>
 
 </section>
@@ -687,19 +686,22 @@ document.querySelectorAll('[data-reveal]:not(.hero [data-reveal])').forEach(el =
    PROJECT INDEX — data-driven row list
    This same array will later feed the case-study "Prev/Next"
    navigation (Stage 3) — single source of truth, not duplicated.
-   PLACEHOLDER: category tags are a draft, not confirmed copy —
-   flagged in handoff for Saeed's review.
+   Names/categories per Saeed's Aug 2026 content revision (Persian
+   phonetic project names, replacing the earlier Latin/mixed set).
+   Row thumbnails (`thumb`) are optional — only VAMCO has a real
+   asset so far; other rows fall back to the placeholder until
+   their assets arrive.
    ========================================================= */
 const PROJECTS = [
-  { num: '۰۱', name: 'VAMCO', cats: 'هویت بصری · راهنمای برند', href: '#' },
-  { num: '۰۲', name: 'TFIT', cats: 'اپلیکیشن · شبکه‌های اجتماعی · نمایشگاه', href: '#' },
-  { num: '۰۳', name: 'Boolooz', cats: 'کمپین دیجیتال · بنر', href: '#' },
-  { num: '۰۴', name: 'استودیو صنعت شریف — خودرو', cats: 'چاپ · بیلبورد · کاتالوگ', href: '#' },
-  { num: '۰۵', name: 'استودیو صنعت شریف — داخلی', cats: 'هویت بصری · پورتفولیو', href: '#' },
-  { num: '۰۶', name: 'تاریس', cats: 'نام‌گذاری · هویت بصری · اینستاگرام', href: '#' },
-  { num: '۰۷', name: 'نوین آرمه', cats: 'لوگو · هویت بصری', href: '#' },
-  { num: '۰۸', name: 'Sitpet', cats: 'بسته‌بندی · هویت برند', href: '#' },
-  { num: '۰۹', name: 'Coli Café', cats: 'لوگو', href: '#' },
+  { num: '۰۱', name: 'ومکو', cats: 'هویت بصری · راهنمای برند · چاپ', thumb: 'assets/img/vamco-index-thumb.webp', href: '#' },
+  { num: '۰۲', name: 'تی‌فیت', cats: 'دیجیتال · شبکه اجتماعی · هوش مصنوعی', href: '#' },
+  { num: '۰۳', name: 'بولوز', cats: 'کمپین · بنر دیجیتال · عکاسی', href: '#' },
+  { num: '۰۴', name: 'استودیو صنعت-خودرو', cats: 'چاپ · بروشور · بیلبورد', href: '#' },
+  { num: '۰۵', name: 'استودیو صنعت-داخلی', cats: 'هویت بصری · لوگو · ملزومات اداری', href: '#' },
+  { num: '۰۶', name: 'تاریس', cats: 'نام‌گذاری · هویت بصری · شبکه اجتماعی', href: '#' },
+  { num: '۰۷', name: 'نوین آرمه', cats: 'لوگو · هویت بصری · فرم‌ها', href: '#' },
+  { num: '۰۸', name: 'سیت‌پت', cats: 'بسته‌بندی · راهنمای برند', href: '#' },
+  { num: '۰۹', name: 'کولی کافه', cats: 'لوگو', href: '#' },
 ];
 
 const listEl = document.getElementById('index-list');
@@ -709,8 +711,11 @@ PROJECTS.forEach((p, i) => {
   row.className = 'index-row';
   row.setAttribute('data-reveal', '');
   row.style.transitionDelay = (i * 60) + 'ms';
+  const thumbInner = p.thumb
+    ? `<img src="${p.thumb}" alt="" style="width:100%;height:100%;object-fit:cover;">`
+    : `<div class="placeholder" style="width:100%;height:100%;"><span class="placeholder__label">پیش‌نمایش</span></div>`;
   row.innerHTML = `
-    <div class="index-row__thumb"><div class="placeholder" style="width:100%;height:100%;"><span class="placeholder__label">پیش‌نمایش</span></div></div>
+    <div class="index-row__thumb">${thumbInner}</div>
     <div class="index-row__inner">
       <div class="index-row__name-block">
         <span class="index-row__num">${p.num}</span>
