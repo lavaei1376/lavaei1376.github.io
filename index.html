@@ -189,10 +189,27 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 .section-divider--tight { height: var(--sp-10-tight); }
 .section-divider--on-dark { background: var(--color-black); }
+/* Line + tint accent (used for Hero → Index transition) */
+.section-divider--accent {
+  background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-surface) 100%);
+}
+.section-divider--accent::before {
+  content: "";
+  position: absolute;
+  left: var(--margin-x);
+  right: var(--margin-x);
+  top: 50%;
+  height: 1px;
+  background: var(--color-border);
+  transform: translateY(-50%);
+}
 .section-divider__ghost {
+  position: relative;
+  z-index: 1;
   font-size: var(--fs-h1);
   font-weight: var(--fw-bold);
   color: var(--color-text-primary);
@@ -200,6 +217,9 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.02em;
   user-select: none;
   pointer-events: none;
+  /* sits on the surface tint, needs its own bg to punch through the line */
+  background: var(--color-surface);
+  padding-inline: var(--sp-4);
 }
 .section-divider--on-dark .section-divider__ghost { color: var(--color-white); opacity: 0.06; }
 
@@ -209,14 +229,14 @@ a { color: inherit; text-decoration: none; }
 .hero {
   position: relative;
   padding-top: var(--nav-h);
-  min-height: 900px;
+  min-height: clamp(600px, 78vh, 780px);
   background: var(--color-bg);
   overflow: hidden;
 }
 .hero__grid {
   display: grid;
   grid-template-columns: 48% 1fr;
-  min-height: calc(900px - var(--nav-h));
+  min-height: calc(clamp(600px, 78vh, 780px) - var(--nav-h));
   /* Lock physical column order (video left, text right) — RTL grid
      would otherwise reverse DOM order and swap these two columns. */
   direction: ltr;
@@ -242,7 +262,7 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
   justify-content: center;
   align-items: flex-start; /* cross-axis start = right, under this column's rtl context */
-  padding-block: var(--sp-8);
+  padding-block: var(--sp-7);
   padding-inline-end: var(--margin-x);
   /* Right edge (physical) matches nav's right edge exactly at any viewport
      width: margin-x normally, or the nav's centered-column inset once the
@@ -409,10 +429,20 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
+  align-items: flex-start; /* cross-axis start = right, under this column's rtl context — same as .hero__content-col */
   text-align: right;
-  padding-inline-end: var(--margin-x);
-  padding-inline-start: var(--sp-6);
+  /* Right edge locked to the same shared edge as Hero text, Index rows,
+     and the footer — see the identical formula on .hero__content-col.
+     NOTE: inline-start = physical right here (column is direction:rtl),
+     so the viewport formula belongs on -start, not -end. (First pass
+     had this backwards — inline-end resolves to the LEFT in rtl, which
+     silently broke the alignment instead of fixing it.)
+     Without this, this column sits flush at margin-x from the true
+     viewport edge while the row-list/footer (inside the centered
+     max-width container) sit further in on wide viewports — the
+     misalignment flagged in review. */
+  padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
+  padding-inline-end: var(--sp-6);
 }
 .index-header__eyebrow {
   font-size: var(--fs-caption);
@@ -590,7 +620,7 @@ a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
-<div class="section-divider">
+<div class="section-divider section-divider--tight section-divider--accent">
   <span class="section-divider__ghost">۰۱</span>
 </div>
 
