@@ -195,7 +195,11 @@ a { color: inherit; text-decoration: none; }
 .section-divider--on-dark { background: var(--color-black); }
 /* Line + tint accent (used for Hero → Index transition) */
 .section-divider--accent {
-  background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-surface) 100%);
+  /* Visible warm-gray wash using the palette's own Border tone — deliberately
+     more noticeable than the earlier bg→surface version (those two are
+     nearly the same value, which is why it read as invisible). Still only
+     colors already in the locked palette, no new hex added. */
+  background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-border) 100%);
 }
 .section-divider--accent::before {
   content: "";
@@ -229,14 +233,21 @@ a { color: inherit; text-decoration: none; }
 .hero {
   position: relative;
   padding-top: var(--nav-h);
-  min-height: clamp(600px, 78vh, 780px);
+  /* Exactly fills the first screen — before any scroll, the visitor should
+     see only Hero, nothing from the section below peeking in. Previously
+     this was min-height: clamp(...), which could be shorter than the
+     viewport on common desktop heights, exposing the divider + black
+     Index header before the first scroll. */
+  height: 100vh;
+  min-height: 600px; /* floor for very short windows so content never gets crushed */
   background: var(--color-bg);
   overflow: hidden;
 }
 .hero__grid {
   display: grid;
   grid-template-columns: 48% 1fr;
-  min-height: calc(clamp(600px, 78vh, 780px) - var(--nav-h));
+  height: calc(100vh - var(--nav-h));
+  min-height: calc(600px - var(--nav-h));
   /* Lock physical column order (video left, text right) — RTL grid
      would otherwise reverse DOM order and swap these two columns. */
   direction: ltr;
@@ -620,9 +631,7 @@ a { color: inherit; text-decoration: none; }
   </div>
 </section>
 
-<div class="section-divider section-divider--tight section-divider--accent">
-  <span class="section-divider__ghost">۰۱</span>
-</div>
+<div class="section-divider section-divider--tight section-divider--accent"></div>
 
 <!-- ============ PROJECT INDEX ============ -->
 <section class="project-index" id="index">
