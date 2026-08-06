@@ -503,7 +503,7 @@ a { color: inherit; text-decoration: none; }
   transition: width var(--dur-base) var(--ease-out);
   z-index: 1;
 }
-.index-row:hover .index-row__thumb { width: 220px; }
+.index-row:hover .index-row__thumb { width: 420px; } /* widened from 220px per review — stronger visual presence, cropping is fine */
 .index-row__thumb .placeholder { width: 100%; height: 100%; border-width: 0 1px 0 0; }
 
 .index-row__inner {
@@ -513,39 +513,58 @@ a { color: inherit; text-decoration: none; }
   margin-inline: auto;
   padding-inline: var(--margin-x);
   height: 100%;
-  display: flex;
+  display: grid;
   align-items: center;
-  justify-content: space-between;
-  /* natural RTL order: name-block first (renders right) → categories → arrow (renders left) */
+  /* Fixed-width columns instead of flex + space-between. With space-between,
+     the categories column's position depended on the name-block's own
+     content width, which differs row to row — that's what produced the
+     uneven, zig-zagging left edge flagged in review. Grid tracks are fixed
+     regardless of a row's own content, so every row's category text starts
+     at the identical x position, and the arrow column stays put too.
+     Order matches the row's inherited RTL flow: first track = rightmost
+     (name), last track = leftmost (arrow). The trailing 0px track is a
+     spacer that grows on hover — see below — so the arrow/categories
+     block visibly shifts right to make room for the thumbnail growing in
+     underneath, rather than the thumbnail just overlapping the text. */
+  grid-template-columns: 460px 1fr 40px 0px;
+  column-gap: var(--sp-4);
+  transition: grid-template-columns var(--dur-base) var(--ease-out);
 }
+.index-row:hover .index-row__inner { grid-template-columns: 460px 1fr 40px 420px; }
 .index-row__name-block {
   display: flex;
   align-items: baseline;
+  justify-content: flex-end; /* hug the row's right edge inside the fixed column */
   gap: var(--sp-2);
   flex-direction: row-reverse; /* number sits tight to the right of the name */
+  min-width: 0; /* allow long names to wrap/ellipsis inside the fixed column rather than push siblings */
 }
 .index-row__num {
   font-size: var(--fs-caption);
   color: var(--color-text-muted);
   font-weight: var(--fw-medium);
+  flex-shrink: 0;
 }
 .index-row__name {
   font-size: var(--fs-h2);
   font-weight: var(--fw-bold);
   color: var(--color-text-primary);
   transition: font-size var(--dur-base) var(--ease-out);
+  white-space: nowrap;
 }
 .index-row:hover .index-row__name { font-size: 2rem; /* 32px */ }
 
 .index-row__categories {
   font-size: var(--fs-small);
   color: var(--color-text-secondary);
+  text-align: left; /* fixed left edge, consistent across every row — see .index-row__inner note */
   transition: opacity var(--dur-base) var(--ease-out);
 }
 .index-row:hover .index-row__categories { opacity: 0.6; }
 
 .index-row__arrow {
   display: inline-flex;
+  justify-content: flex-start;
   color: var(--color-border);
   transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
 }
@@ -573,7 +592,7 @@ a { color: inherit; text-decoration: none; }
   .index-header__content { align-items: flex-end; padding: var(--sp-6) var(--sp-5); }
   .index-header__title { font-size: 2.25rem; }
   .index-row__thumb { display: none; } /* hover thumbnail is a desktop-only affordance */
-  .index-row__inner { padding-inline: var(--sp-5); }
+  .index-row__inner { padding-inline: var(--sp-5); grid-template-columns: 1fr 40px; } /* fixed 460px name column only makes sense at desktop widths */
   .index-row__name { font-size: var(--fs-h2) !important; }
   .index-row__categories { display: none; } /* reintroduce as secondary line in Stage 7 mobile pass */
 }
