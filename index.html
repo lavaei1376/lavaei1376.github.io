@@ -534,9 +534,13 @@ a { color: inherit; text-decoration: none; }
 .index-row__name-block {
   display: flex;
   align-items: baseline;
-  justify-content: flex-end; /* hug the row's right edge inside the fixed column */
+  justify-content: flex-start; /* pack the name+num pair against the column's own right edge (main-start under inherited RTL) */
   gap: var(--sp-2);
-  flex-direction: row-reverse; /* number sits tight to the right of the name */
+  /* NOTE: row-reverse here was the bug — combined with inherited direction:rtl it put the
+     number on the LEFT of the name (verified via Playwright measurement: num.right < name.left).
+     Plain "row" (default) + flex-start correctly places the first DOM child (num) at the
+     RTL main-start (physical right), with name following to its left — number tight to the
+     name's right side, matching the Figma reference. Do not reintroduce row-reverse here. */
   min-width: 0; /* allow long names to wrap/ellipsis inside the fixed column rather than push siblings */
 }
 .index-row__num {
