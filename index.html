@@ -652,6 +652,139 @@ a { color: inherit; text-decoration: none; }
   .index-row__name { font-size: var(--fs-h2) !important; }
   .index-row__categories { display: none; } /* reintroduce as secondary line in Stage 7 mobile pass */
 }
+
+/* =========================================================
+   ABOUT & CONTACT — final section on the page (arrives after
+   all case studies once those exist; built standalone for now,
+   no DOM-position assumptions per the locked page-structure note).
+   Structurally mirrors .hero: full-bleed grid, no .container cap,
+   physical column order locked via direction:ltr on the grid with
+   direction:rtl restored on the text column — same pattern used
+   throughout (see .hero__grid / .index-header). Proportions are
+   reversed from Hero (text 65% / photo 35%, text on the LEFT this
+   time) per the locked Figma spec, so DOM order is content-col
+   first, photo-col second.
+   ========================================================= */
+.about { background: var(--color-bg); }
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr 35%;
+  min-height: 720px;
+  /* Lock physical column order (text left, photo right) — first DOM
+     child lands left under direction:ltr, matching the Figma spec's
+     "left column = text, right column = photo" (physical, not DOM). */
+  direction: ltr;
+}
+
+.about__content-col {
+  direction: rtl; /* restore RTL context for text + logical spacing */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* cross-axis start = right, under this column's rtl context */
+  padding-block: var(--sp-7);
+  /* This column sits on the physical LEFT (mirrored from Hero), bounded
+     by the photo column on its own physical right — inline-start (=
+     physical right in this rtl-restored block) just needs a plain
+     gutter here, not the viewport formula, since it never reaches the
+     true viewport edge. */
+  padding-inline-start: var(--sp-7);
+  /* inline-end (= physical left here) is the side that touches the
+     true viewport left edge, matching nav__lang's left edge — same
+     shared-edge formula used elsewhere, applied to the opposite side
+     from Hero/Index since this column is mirrored. */
+  padding-inline-end: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
+  text-align: right;
+}
+
+.about__photo-col {
+  position: relative;
+  background: var(--color-black);
+  overflow: hidden;
+}
+.about__photo-col img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.about__photo-col .placeholder { position: absolute; inset: 0; border: none; border-radius: 0; }
+
+.about__eyebrow-row { display: flex; flex-direction: column; }
+
+.about__text {
+  margin-top: var(--sp-5);
+  max-width: 460px;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-loose);
+  color: var(--color-text-secondary);
+}
+.about__text--first { margin-top: var(--sp-5); }
+
+.about__rule {
+  width: 100%;
+  max-width: 460px;
+  height: 1px;
+  background: var(--color-border);
+  margin-top: var(--sp-6);
+}
+
+.about__contact-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+.about__contact-row:first-of-type { margin-top: var(--sp-5); }
+.about__contact-label {
+  font-size: var(--fs-caption);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+.about__contact-value {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+}
+
+/* --- closing band — belongs to this page only, not a site footer --- */
+.about__closing {
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-4);
+}
+.about__closing-logo { color: var(--color-text-primary); }
+.about__closing-logo svg { height: 32px; width: auto; }
+.about__closing-msg {
+  font-size: var(--fs-body);
+  color: var(--color-text-primary);
+  line-height: var(--lh-loose);
+  max-width: 420px;
+}
+.about__closing-credit {
+  font-size: var(--fs-caption);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 900px) {
+  .about__grid { grid-template-columns: 1fr; min-height: auto; }
+  .about__photo-col { height: 360px; }
+  .about__content-col {
+    align-items: center;
+    text-align: center;
+    padding: var(--sp-7) var(--sp-5);
+  }
+  .about__text, .about__rule { margin-inline: auto; }
+  .about__contact-row { justify-content: center; }
+  .about__closing { padding-block: var(--sp-7) var(--sp-8); }
+}
 </style>
 </head>
 <body>
@@ -732,6 +865,64 @@ a { color: inherit; text-decoration: none; }
     <span>۹ پروژه</span>
   </div>
 
+</section>
+
+<!-- Case studies (Stage 3) will be inserted here, between Project Index
+     and About & Contact, once built — About & Contact is the LAST
+     section on the page, not the second. Do not assume DOM adjacency
+     to Project Index when extending this section later. -->
+
+<div class="section-divider section-divider--tight section-divider--accent"></div>
+
+<!-- ============ ABOUT & CONTACT ============ -->
+<section class="about" id="about">
+  <div class="about__grid">
+
+    <div class="about__content-col">
+      <p class="hero__eyebrow" data-reveal>درباره و تماس</p>
+      <div class="hero__deco-line" data-reveal></div>
+
+      <p class="about__text about__text--first" data-reveal>[ متن معرفی کوتاه — ۳ تا ۴ خط. توضیح مختصر درباره پیشینه، حوزه تخصص و مسیر حرفه‌ای. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+
+      <p class="about__text" data-reveal>[ توضیح رویکرد طراحی و نقاط تمایز — ۲ تا ۳ خط. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+
+      <div class="about__rule" data-reveal></div>
+
+      <p class="about__text" data-reveal>[ وضعیت همکاری — مثلاً «در حال حاضر آماده همکاری تمام‌وقت و پروژه‌های فریلنس» ]</p>
+
+      <div class="about__contact-row" data-reveal>
+        <span class="about__contact-label">ایمیل</span>
+        <span class="about__contact-value">[ ایمیل ]</span>
+      </div>
+      <div class="about__contact-row" data-reveal>
+        <span class="about__contact-label">لینکدین</span>
+        <span class="about__contact-value">[ لینکدین ]</span>
+      </div>
+
+      <a href="#" class="hero__cta" data-reveal>
+        <span>تماس بگیرید</span>
+        <span class="hero__cta-arrow">←</span>
+      </a>
+    </div>
+
+    <div class="about__photo-col">
+      <div class="placeholder placeholder--on-dark" style="width:100%; height:100%;">
+        <span class="placeholder__label">تصویر پرتره</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="about__closing">
+    <div class="about__closing-logo" aria-hidden="true">
+      <svg viewBox="0 0 175.01 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100,12.5V61.24c0,35.21-28.55,63.76-63.76,63.76h-3.23C14.78,125,0,139.78,0,158.02v29.48c0,6.9,5.6,12.5,12.5,12.5h0c6.9,0,12.5-5.6,12.5-12.5v-25c0-6.9,5.6-12.5,12.5-12.5h0c6.91,0,12.5,5.6,12.5,12.5v1.88c0,19.67,15.94,35.61,35.61,35.61h1.9c6.9,0,12.5-5.6,12.5-12.5h0c0-6.9-5.6-12.5-12.5-12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.91,5.6-12.5,12.5-12.5h50c6.9,0,12.5,5.6,12.5,12.5h0c0,6.91-5.6,12.5-12.5,12.5h0c-6.9,0-12.5,5.6-12.5,12.5h0c0,6.9,5.6,12.5,12.5,12.5h0c20.71,0,37.5-16.79,37.5-37.5h0c0-20.71-16.79-37.5-37.5-37.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9,5.6-12.5,12.5-12.5h25.01c6.9,0,12.5-5.6,12.5-12.5h0c0-6.91-5.6-12.5-12.5-12.5h-25.01c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.91,5.6-12.5,12.5-12.5h25.01c6.9,0,12.5-5.6,12.5-12.5h0c0-6.91-5.6-12.5-12.5-12.5h-25.01c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9-5.59-12.49-12.49-12.5h0c-6.9,0-12.5,5.59-12.5,12.5Z"/>
+        <path d="M75,62.5V12.5c0-6.9-5.6-12.5-12.5-12.5h0c-6.9,0-12.5,5.6-12.5,12.5h0c0,6.9-5.6,12.5-12.5,12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0C25,5.6,19.41,0,12.5,0h0C5.6,0,0,5.6,0,12.5V62.5c0,20.71,16.79,37.5,37.5,37.5h0c20.71,0,37.5-16.79,37.5-37.5Zm-37.5-12.5h0c6.9,0,12.5,5.6,12.5,12.5h0c0,6.91-5.6,12.5-12.5,12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9,5.6-12.5,12.5-12.5Z"/>
+      </svg>
+    </div>
+    <p class="about__closing-msg">از این‌که وقت گذاشتید و تا انتها همراه بودید ممنونم.<br>خوشحال می‌شوم درباره پروژه بعدی صحبت کنیم.</p>
+    <p class="about__closing-credit">سعید لواعی · طراح گرافیک ارشد</p>
+  </div>
 </section>
 
 <script>
