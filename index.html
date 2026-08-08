@@ -785,6 +785,258 @@ a { color: inherit; text-decoration: none; }
   .about__contact-row { justify-content: center; }
   .about__closing { padding-block: var(--sp-7) var(--sp-8); }
 }
+
+/* =========================================================
+   CASE STUDY TEMPLATE — VAMCO is the first build; this same
+   markup/CSS structure becomes the template for case studies
+   2–9 (built directly in code per Saeed's decision, no Figma
+   for the rest). Keep class names generic (.case-*, not
+   .vamco-*) so the template reuse is literal, not a copy-paste
+   rename exercise.
+   ========================================================= */
+
+/* --- Hero --- */
+.case-hero {
+  position: relative;
+  height: 600px; /* measured from Figma reference (~582px); round, adjustable */
+  background: var(--color-black);
+  overflow: hidden;
+}
+.case-hero__grid {
+  display: grid;
+  grid-template-columns: 50% 1fr;
+  height: 100%;
+  /* Lock physical column order (image left, text right) — same pattern
+     as .hero__grid. */
+  direction: ltr;
+}
+.case-hero__media {
+  position: relative;
+  overflow: hidden;
+}
+.case-hero__media .placeholder--on-dark { position: absolute; inset: 0; border-width: 0 1px 0 0; }
+
+.case-hero__content {
+  direction: rtl; /* restore RTL context for text + logical spacing */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end; /* right-align within this column */
+  text-align: right;
+  padding-inline-end: var(--sp-6);
+  /* Same shared right-edge formula as Hero/Index text columns. */
+  padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
+}
+.case-hero__eyebrow-row {
+  font-size: var(--fs-caption);
+  color: rgba(255,255,255,0.55);
+  line-height: var(--lh-normal);
+}
+.case-hero__eyebrow-row span { display: block; }
+.case-hero__title {
+  margin-top: var(--sp-4);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  color: var(--color-white);
+  letter-spacing: 0.01em;
+}
+.case-hero__subtitle {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  color: rgba(255,255,255,0.85);
+}
+.case-hero__rule {
+  width: 100%;
+  max-width: 340px;
+  height: 1px;
+  background: rgba(255,255,255,0.18);
+  margin-top: var(--sp-5);
+}
+.case-hero__meta {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-small);
+  color: rgba(255,255,255,0.55);
+}
+.case-hero__scroll-hint {
+  position: absolute;
+  bottom: var(--sp-5);
+  right: var(--margin-x);
+  font-size: var(--fs-micro);
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.03em;
+}
+
+/* --- Brief & Approach --- */
+.case-brief { background: var(--color-surface); padding-block: var(--sp-9); }
+.case-brief__grid {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8);
+  /* Lock physical order: deliverables list left, brief text right —
+     matches the Figma reference. */
+  direction: ltr;
+}
+.case-brief__col { direction: rtl; text-align: right; }
+.case-brief__heading {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.03em;
+}
+.case-brief__text {
+  margin-top: var(--sp-4);
+  max-width: 480px;
+  margin-inline-start: auto; /* right-align the text block within its column under rtl */
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-loose);
+  color: var(--color-text-secondary);
+}
+.case-brief__list {
+  margin-top: var(--sp-4);
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.case-brief__list li {
+  font-size: var(--fs-body);
+  color: var(--color-text-primary);
+}
+
+/* --- Gallery --- */
+.case-gallery { background: var(--color-bg); padding-block: var(--sp-9); }
+.case-gallery__header {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-bottom: var(--sp-6);
+  text-align: right;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.03em;
+}
+.case-gallery__grid {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+.case-gallery__row { display: grid; gap: var(--sp-5); }
+.case-gallery__row--full { grid-template-columns: 1fr; }
+.case-gallery__row--half { grid-template-columns: 1fr 1fr; }
+.case-gallery__row--triple { grid-template-columns: 1fr 1fr 1fr; }
+.case-gallery__row--asym {
+  grid-template-columns: 38% 1fr;
+  /* Lock physical order (portrait cell left, wide detail right) — the
+     row list's columns are symmetric everywhere else in the gallery,
+     so this is the one row where DOM order vs. inherited RTL direction
+     actually matters. Without this, the default inherited rtl from
+     <html> reverses it. */
+  direction: ltr;
+}
+
+.case-gallery__cell {
+  position: relative;
+  overflow: hidden;
+}
+.case-gallery__cell--lg { border-radius: var(--radius-md); }
+.case-gallery__cell--sm { border-radius: var(--radius-sm); }
+.case-gallery__cell .placeholder { position: absolute; inset: 0; }
+.case-gallery__cell--ratio-16-9 { aspect-ratio: 16 / 9; }
+.case-gallery__cell--ratio-4-3 { aspect-ratio: 4 / 3; }
+.case-gallery__cell--ratio-1-1 { aspect-ratio: 1 / 1; }
+.case-gallery__cell--ratio-2-3 { aspect-ratio: 2 / 3; }
+.case-gallery__cell--ratio-21-9 { aspect-ratio: 21 / 9; }
+
+.case-gallery__auto-chip {
+  position: absolute;
+  top: var(--sp-3);
+  left: var(--sp-3);
+  z-index: 2;
+  font-size: var(--fs-tiny);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 3px var(--sp-2);
+}
+.case-gallery__dots {
+  position: absolute;
+  bottom: var(--sp-3);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+.case-gallery__dots span {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+.case-gallery__dots span:first-child { background: var(--color-text-primary); }
+
+/* --- Project nav footer --- */
+.case-nav-footer {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+.case-nav-footer__inner {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-block: var(--sp-5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* Lock physical order: next-project left, counter center, prev-project
+     right — matches the Figma reference. */
+  direction: ltr;
+  font-size: var(--fs-small);
+}
+.case-nav-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--color-text-muted);
+  direction: rtl; /* restore natural Persian word order within the label */
+  cursor: default;
+}
+.case-nav-footer__counter {
+  color: var(--color-text-secondary);
+  font-size: var(--fs-caption);
+  direction: rtl;
+}
+
+@media (max-width: 900px) {
+  .case-hero { height: auto; min-height: 480px; }
+  .case-hero__grid { grid-template-columns: 1fr; height: auto; }
+  .case-hero__media { height: 320px; }
+  .case-hero__content { align-items: center; text-align: center; padding: var(--sp-6) var(--sp-5); }
+  .case-hero__rule { margin-inline: auto; }
+  .case-hero__scroll-hint { display: none; }
+
+  .case-brief__grid { grid-template-columns: 1fr; gap: var(--sp-6); }
+  .case-brief__text { margin-inline: auto; }
+
+  .case-gallery__row--half,
+  .case-gallery__row--triple,
+  .case-gallery__row--asym { grid-template-columns: 1fr; }
+
+  .case-nav-footer__inner { flex-wrap: wrap; gap: var(--sp-3); justify-content: center; text-align: center; }
+}
 </style>
 </head>
 <body>
@@ -867,10 +1119,119 @@ a { color: inherit; text-decoration: none; }
 
 </section>
 
-<!-- Case studies (Stage 3) will be inserted here, between Project Index
-     and About & Contact, once built — About & Contact is the LAST
-     section on the page, not the second. Do not assume DOM adjacency
-     to Project Index when extending this section later. -->
+<!-- Case studies 2–9 (Stage 3 continued) will be inserted here, after
+     VAMCO, once VAMCO is reviewed/approved as the template — About &
+     Contact remains the LAST section on the page regardless. -->
+
+<div class="section-divider section-divider--tight section-divider--accent"></div>
+
+<!-- ============ CASE STUDY: VAMCO ============ -->
+<section class="case-study" id="vamco">
+
+  <div class="case-hero">
+    <div class="case-hero__grid">
+      <div class="case-hero__media">
+        <div class="placeholder placeholder--on-dark" style="width:100%;height:100%;">
+          <span class="placeholder__label">Hero Image 16 : 9</span>
+        </div>
+      </div>
+      <div class="case-hero__content">
+        <div class="case-hero__eyebrow-row">
+          <span>پروژه</span>
+          <span>۰۱ / ۰۹</span>
+        </div>
+        <h1 class="case-hero__title">VAMCO</h1>
+        <p class="case-hero__subtitle">هویت بصری<br>و راهنمای سبک برند</p>
+        <div class="case-hero__rule"></div>
+        <p class="case-hero__meta">استودیو صنعت شریف · ۱۴۰۰–۱۴۰۲ · هویت برند · چاپ · نمایشگاه</p>
+      </div>
+    </div>
+    <span class="case-hero__scroll-hint">برای ادامه اسکرول کنید</span>
+  </div>
+
+  <div class="case-brief">
+    <div class="case-brief__grid">
+      <div class="case-brief__col">
+        <span class="case-brief__heading">دستاوردها</span>
+        <ul class="case-brief__list">
+          <li>بازطراحی لوگو —</li>
+          <li>راهنمای سبک برند —</li>
+          <li>کاتالوگ نمایشگاهی (روس/انگلیسی) —</li>
+          <li>بروشور محصولات —</li>
+          <li>ملزومات اداری —</li>
+        </ul>
+      </div>
+      <div class="case-brief__col">
+        <span class="case-brief__heading">توضیح و رویکرد</span>
+        <p class="case-brief__text">متن نمونه — ۲ تا ۳ جمله. زمینه پروژه، نیاز کارفرما، و رویکرد طراح. ساده و مستقیم.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-gallery">
+    <div class="case-gallery__header">گالری آثار</div>
+    <div class="case-gallery__grid">
+
+      <div class="case-gallery__row case-gallery__row--full">
+        <div class="case-gallery__cell case-gallery__cell--lg case-gallery__cell--ratio-16-9 placeholder">
+          <span class="placeholder__label">نمای عریض ۱۶ : ۹</span>
+        </div>
+      </div>
+
+      <div class="case-gallery__row case-gallery__row--half">
+        <div class="case-gallery__cell case-gallery__cell--lg case-gallery__cell--ratio-4-3 placeholder">
+          <span class="placeholder__label">۴ : ۳</span>
+        </div>
+        <div class="case-gallery__cell case-gallery__cell--lg case-gallery__cell--ratio-4-3 placeholder">
+          <span class="placeholder__label">۴ : ۳</span>
+        </div>
+      </div>
+
+      <div class="case-gallery__row case-gallery__row--triple">
+        <div class="case-gallery__cell case-gallery__cell--sm case-gallery__cell--ratio-1-1 placeholder">
+          <span class="placeholder__label">۱ : ۱ ثابت</span>
+        </div>
+        <div class="case-gallery__cell case-gallery__cell--sm case-gallery__cell--ratio-1-1 placeholder">
+          <span class="case-gallery__auto-chip">AUTO</span>
+          <span class="placeholder__label">۱ : ۱</span>
+          <span class="case-gallery__dots"><span></span><span></span><span></span></span>
+        </div>
+        <div class="case-gallery__cell case-gallery__cell--sm case-gallery__cell--ratio-1-1 placeholder">
+          <span class="placeholder__label">۱ : ۱ ثابت</span>
+        </div>
+      </div>
+
+      <div class="case-gallery__row case-gallery__row--asym">
+        <div class="case-gallery__cell case-gallery__cell--lg case-gallery__cell--ratio-2-3 placeholder">
+          <span class="placeholder__label">جزئیات ۲ : ۳</span>
+        </div>
+        <div class="case-gallery__cell case-gallery__cell--lg placeholder" style="aspect-ratio: 3 / 2;">
+          <span class="placeholder__label">جزئیات گسترده</span>
+        </div>
+      </div>
+
+      <div class="case-gallery__row case-gallery__row--full">
+        <div class="case-gallery__cell case-gallery__cell--lg case-gallery__cell--ratio-21-9 placeholder">
+          <span class="placeholder__label">سینمایی / اتمسفر ۲۱ : ۹</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="case-nav-footer">
+    <div class="case-nav-footer__inner">
+      <span class="case-nav-footer__link" aria-disabled="true">پروژه بعدی ←</span>
+      <span class="case-nav-footer__counter">۰۱ / ۰۹</span>
+      <span class="case-nav-footer__link" aria-disabled="true">→ پروژه قبلی</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- Case studies 3–9 (Stage 3 continued) will be inserted here, once
+     VAMCO is reviewed/approved as the template — About & Contact
+     remains the LAST section on the page regardless. -->
 
 <div class="section-divider section-divider--tight section-divider--accent"></div>
 
@@ -959,7 +1320,7 @@ document.querySelectorAll('[data-reveal]:not(.hero [data-reveal]), [data-reveal-
    their assets arrive.
    ========================================================= */
 const PROJECTS = [
-  { num: '۰۱', name: 'ومکو', cats: 'هویت بصری · راهنمای برند · چاپ', thumb: 'assets/img/vamco-index-thumb.webp', href: '#' },
+  { num: '۰۱', name: 'ومکو', cats: 'هویت بصری · راهنمای برند · چاپ', thumb: 'assets/img/vamco-index-thumb.webp', href: '#vamco' },
   { num: '۰۲', name: 'تی‌فیت', cats: 'دیجیتال · شبکه اجتماعی · هوش مصنوعی', href: '#' },
   { num: '۰۳', name: 'بولوز', cats: 'کمپین · بنر دیجیتال · عکاسی', href: '#' },
   { num: '۰۴', name: 'استودیو صنعت-خودرو', cats: 'چاپ · بروشور · بیلبورد', href: '#' },
