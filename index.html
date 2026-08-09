@@ -5,1074 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سعید لواعی — طراح گرافیک ارشد</title>
 <meta name="description" content="پورتفولیوی سعید لواعی، طراح گرافیک ارشد — هویت بصری، چاپ و طراحی دیجیتال">
-
-<style>
-/* =========================================================
-   FONT — Peyda Variable (single file, weight 100–950)
-   ========================================================= */
-@font-face {
-  font-family: 'Peyda';
-  src: url('assets/fonts/PeydaWebVF.woff2') format('woff2-variations'),
-       url('assets/fonts/PeydaWebVF.woff2') format('woff2');
-  font-weight: 100 950;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* =========================================================
-   DESIGN TOKENS — derived from the locked Figma system
-   ========================================================= */
-:root {
-  /* Color */
-  --color-bg:            #F7F5F2; /* page background */
-  --color-surface:       #FCFBF9; /* cards, nav, placeholder fill */
-  --color-placeholder:   #F0EEEB; /* image/media placeholder field */
-  --color-text-primary:  #1B1B1B;
-  --color-text-secondary:#6C6C6C;
-  --color-text-muted:    #BFBAB4; /* row numbers, faint numerals */
-  --color-border:        #E7E3DD;
-  --color-black:         #111111; /* case-study hero backgrounds (intentional exception) */
-  --color-white:         #FFFFFF;
-
-  /* Type */
-  --font-main: 'Peyda', 'Vazirmatn', sans-serif;
-  --fs-display:    4rem;      /* 64px — hero name */
-  --fs-h1:         2.75rem;   /* 44px */
-  --fs-h2:         1.75rem;   /* 28px — project names */
-  --fs-body-lg:    1.125rem;  /* 18px */
-  --fs-body:       1rem;      /* 16px */
-  --fs-small:      0.875rem;  /* 14px */
-  --fs-caption:    0.8125rem; /* 13px — eyebrows, nav */
-  --fs-micro:      0.75rem;   /* 12px */
-  --fs-tiny:       0.625rem;  /* 10px */
-
-  --fw-regular: 400;
-  --fw-medium:  500;
-  --fw-semibold:600;
-  --fw-bold:    700;
-
-  --lh-tight: 1.1;
-  --lh-normal: 1.5;
-  --lh-loose: 1.8;
-
-  /* Spacing scale (used for gaps, padding, section rhythm) */
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-5: 24px;
-  --sp-6: 32px;
-  --sp-7: 48px;
-  --sp-8: 64px;
-  --sp-9: 96px;
-  --sp-10: 140px;   /* default breathing room between major sections */
-  --sp-10-tight: 96px; /* reduced variant, e.g. list-style sections */
-
-  /* Radius */
-  --radius-lg: 16px;  /* hero/portrait placeholders */
-  --radius-md: 12px;  /* large gallery frames */
-  --radius-sm: 8px;   /* small gallery cells */
-
-  /* Motion */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast: 200ms;
-  --dur-base: 400ms;
-  --dur-slow: 700ms;
-
-  /* Layout */
-  --nav-h: 64px;
-  --content-max: 1440px;
-  --margin-x: 80px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --dur-fast: 0ms;
-    --dur-base: 0ms;
-    --dur-slow: 0ms;
-  }
-}
-
-/* =========================================================
-   RESET
-   ========================================================= */
-*, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-
-body {
-  margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text-primary);
-  font-family: var(--font-main);
-  font-weight: var(--fw-regular);
-  line-height: var(--lh-normal);
-  -webkit-font-smoothing: antialiased;
-}
-
-img, svg, video { display: block; max-width: 100%; }
-button { font-family: inherit; cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-
-/* visible keyboard focus everywhere — accessibility floor */
-:focus-visible {
-  outline: 2px solid var(--color-text-primary);
-  outline-offset: 3px;
-}
-
-.container {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-}
-
-/* =========================================================
-   NAV — fixed, shared across sections
-   ========================================================= */
-.nav {
-  position: fixed;
-  inset-inline: 0;
-  top: 0;
-  height: var(--nav-h);
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  z-index: 100;
-}
-.nav__inner {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* Lock physical order (lang left, logo right) — RTL flex would
-     otherwise reverse DOM order and swap these. Text inside stays RTL. */
-  direction: ltr;
-}
-.nav__logo {
-  display: flex;
-  align-items: center;
-  color: var(--color-text-primary);
-}
-.nav__logo svg { height: 28px; width: auto; }
-.nav__links {
-  display: flex;
-  gap: var(--sp-5);
-  list-style: none;
-  margin: 0; padding: 0;
-  font-size: var(--fs-caption);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-secondary);
-  direction: rtl; /* restore correct reading order for the Persian labels */
-}
-.nav__links a { transition: color var(--dur-fast) var(--ease-out); }
-.nav__links a:hover { color: var(--color-text-primary); }
-.nav__lang {
-  font-size: var(--fs-caption);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.05em;
-  direction: ltr;
-}
-
-/* =========================================================
-   SECTION DIVIDER — the "breathing room" system
-   Reusable between every major section. Ghost-number gives
-   quiet wayfinding instead of being pure dead space.
-   Usage: place between two <section> elements.
-   ========================================================= */
-.section-divider {
-  position: relative;
-  height: var(--sp-10);
-  background: var(--color-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.section-divider--tight { height: var(--sp-10-tight); }
-.section-divider--on-dark { background: var(--color-black); }
-/* Line + tint accent (used for Hero → Index transition) */
-.section-divider--accent {
-  /* Visible warm-gray wash using the palette's own Border tone — deliberately
-     more noticeable than the earlier bg→surface version (those two are
-     nearly the same value, which is why it read as invisible). Still only
-     colors already in the locked palette, no new hex added. */
-  background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-border) 100%);
-}
-.section-divider--accent::before {
-  content: "";
-  position: absolute;
-  left: var(--margin-x);
-  right: var(--margin-x);
-  top: 50%;
-  height: 1px;
-  background: var(--color-border);
-  transform: translateY(-50%);
-}
-.section-divider__ghost {
-  position: relative;
-  z-index: 1;
-  font-size: var(--fs-h1);
-  font-weight: var(--fw-bold);
-  color: var(--color-text-primary);
-  opacity: 0.04;
-  letter-spacing: 0.02em;
-  user-select: none;
-  pointer-events: none;
-  /* sits on the surface tint, needs its own bg to punch through the line */
-  background: var(--color-surface);
-  padding-inline: var(--sp-4);
-}
-.section-divider--on-dark .section-divider__ghost { color: var(--color-white); opacity: 0.06; }
-
-/* =========================================================
-   HERO
-   ========================================================= */
-.hero {
-  position: relative;
-  padding-top: var(--nav-h);
-  /* Exactly fills the first screen — before any scroll, the visitor should
-     see only Hero, nothing from the section below peeking in. Previously
-     this was min-height: clamp(...), which could be shorter than the
-     viewport on common desktop heights, exposing the divider + black
-     Index header before the first scroll. */
-  height: 100vh;
-  min-height: 600px; /* floor for very short windows so content never gets crushed */
-  background: var(--color-bg);
-  overflow: hidden;
-}
-.hero__grid {
-  display: grid;
-  grid-template-columns: 48% 1fr;
-  height: calc(100vh - var(--nav-h));
-  min-height: calc(600px - var(--nav-h));
-  /* Lock physical column order (video left, text right) — RTL grid
-     would otherwise reverse DOM order and swap these two columns. */
-  direction: ltr;
-}
-
-/* left column — character video, flush edge-to-edge */
-.hero__illu-col {
-  position: relative;
-  background: var(--color-black);
-  overflow: hidden;
-}
-.hero__video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* right column — identity + CTA */
-.hero__content-col {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start; /* cross-axis start = right, under this column's rtl context */
-  padding-block: var(--sp-7);
-  padding-inline-end: var(--margin-x);
-  /* Right edge (physical) matches nav's right edge exactly at any viewport
-     width: margin-x normally, or the nav's centered-column inset once the
-     viewport exceeds content-max. Video column stays full-bleed regardless. */
-  padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
-  text-align: right;
-  direction: rtl; /* restore RTL context for this column's own layout/logical properties */
-}
-.hero__eyebrow {
-  font-size: var(--fs-caption);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.05em;
-}
-.hero__deco-line {
-  width: 100%; max-width: 260px; height: 1px;
-  background: var(--color-border);
-  margin: var(--sp-2) 0 0 auto;
-}
-.hero__name {
-  font-size: var(--fs-display);
-  font-weight: var(--fw-bold);
-  line-height: var(--lh-tight);
-  margin: 0;
-}
-.hero__bio {
-  margin-top: var(--sp-5);
-  max-width: 460px;
-  font-size: var(--fs-body);
-  font-weight: var(--fw-regular);
-  line-height: var(--lh-loose);
-  color: var(--color-text-secondary);
-}
-.hero__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-4) var(--sp-6);
-  background: transparent;
-  border: 1px solid var(--color-text-primary);
-  border-radius: 999px;
-  font-size: var(--fs-small);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-primary);
-  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
-  margin-top: var(--sp-6);
-}
-.hero__cta:hover { background: var(--color-text-primary); color: var(--color-white); }
-.hero__cta-arrow { display: inline-flex; transition: transform var(--dur-fast) var(--ease-out); }
-.hero__cta:hover .hero__cta-arrow { transform: translateY(3px); }
-
-.hero__stats {
-  display: flex;
-  justify-content: flex-start;
-  gap: var(--sp-7);
-  margin-top: var(--sp-6);
-  width: 100%;
-  max-width: 460px;
-}
-.hero__stat {
-  text-align: center;
-}
-.hero__stat-num {
-  display: block;
-  font-size: var(--fs-h2);
-  font-weight: var(--fw-bold);
-}
-.hero__stat-label {
-  display: block;
-  margin-top: var(--sp-2);
-  font-size: var(--fs-caption);
-  color: var(--color-text-secondary);
-}
-
-/* =========================================================
-   SCROLL / LOAD REVEAL — respects reduced motion
-   ========================================================= */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(14px) scale(0.985);
-  filter: blur(6px);
-  transition: opacity var(--dur-slow) var(--ease-out),
-              transform var(--dur-slow) var(--ease-out),
-              filter var(--dur-slow) var(--ease-out);
-}
-[data-reveal].is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
-}
-
-/* Image-specific reveal — separate from [data-reveal] on purpose.
-   Blur filters are expensive to repaint on large photographs, so images
-   get a Ken Burns-style zoom-settle instead: starts slightly zoomed in,
-   eases down to natural scale as it fades in. This was actually part of
-   the original locked design spec ("zoom-settle on hero images") that
-   never got wired up. Parent needs overflow:hidden (already true for
-   .index-header__media and every gallery/case-study image container by
-   convention) so the initial scale doesn't visibly overflow.
-   Use this on every future project image — header shots, case-study
-   heroes, gallery images — not just here. */
-[data-reveal-img] {
-  opacity: 0;
-  transform: scale(1.08);
-  transition: opacity var(--dur-slow) var(--ease-out), transform 900ms var(--ease-out);
-}
-[data-reveal-img].is-visible {
-  opacity: 1;
-  transform: scale(1);
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-reveal-img] { opacity: 1; transform: none; transition: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-reveal] { opacity: 1; transform: none; filter: none; transition: none; }
-}
-
-/* =========================================================
-   RESPONSIVE — placeholder breakpoint, full mobile pass is Stage 7
-   ========================================================= */
-@media (max-width: 900px) {
-  .hero__grid { grid-template-columns: 1fr; }
-  .hero__illu-col { min-height: 420px; }
-  .hero__content-col { text-align: center; align-items: center; padding: var(--sp-7) var(--sp-5); }
-  .hero__deco-line, .hero__bio, .hero__stats { margin-inline: auto; }
-  .hero__cta { margin-inline: auto; }
-  .nav__links { display: none; } /* mobile nav pattern TBD in Stage 7 */
-  :root { --margin-x: 24px; }
-}
-
-/* =========================================================
-   PLACEHOLDER — generic media placeholder (crosshair + label)
-   Used until real assets arrive. Two variants: on light surfaces
-   (default) and on dark sections (--on-dark).
-   ========================================================= */
-.placeholder {
-  position: relative;
-  background: var(--color-placeholder);
-  border: 1px dashed var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.placeholder::before, .placeholder::after {
-  content: "";
-  position: absolute;
-  background: var(--color-border);
-}
-.placeholder::before { top: 0; bottom: 0; left: 50%; width: 1px; }
-.placeholder::after   { left: 0; right: 0; top: 50%; height: 1px; }
-.placeholder__label {
-  position: relative;
-  z-index: 1;
-  font-size: var(--fs-micro);
-  color: var(--color-text-secondary);
-  background: var(--color-placeholder);
-  padding: var(--sp-1) var(--sp-2);
-  text-align: center;
-}
-.placeholder--on-dark {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.18);
-}
-.placeholder--on-dark::before, .placeholder--on-dark::after { background: rgba(255,255,255,0.18); }
-.placeholder--on-dark .placeholder__label {
-  color: rgba(255,255,255,0.55);
-  background: transparent;
-}
-
-/* =========================================================
-   PROJECT INDEX
-   ========================================================= */
-.project-index { background: var(--color-bg); }
-
-/* --- header band (black, full-width editorial entry) --- */
-.index-header {
-  display: grid;
-  grid-template-columns: 48% 1fr; /* widened from 44%, matches Saeed's Figma redesign */
-  height: 240px;
-  background: var(--color-black);
-  overflow: hidden;
-  /* Lock physical order (media left, text right) — see Section 6a pattern */
-  direction: ltr;
-}
-.index-header__media {
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-}
-.index-header__media img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 30%; /* keeps the character's face/speech-bubble in frame rather than centering blindly */
-}
-.index-header__content {
-  direction: rtl; /* restore RTL for text + logical spacing */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start; /* cross-axis start = right, under this column's rtl context — same as .hero__content-col */
-  text-align: right;
-  /* Right edge locked to the same shared edge as Hero text, Index rows,
-     and the footer — see the identical formula on .hero__content-col.
-     NOTE: inline-start = physical right here (column is direction:rtl),
-     so the viewport formula belongs on -start, not -end. (First pass
-     had this backwards — inline-end resolves to the LEFT in rtl, which
-     silently broke the alignment instead of fixing it.)
-     Without this, this column sits flush at margin-x from the true
-     viewport edge while the row-list/footer (inside the centered
-     max-width container) sit further in on wide viewports — the
-     misalignment flagged in review. */
-  padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
-  padding-inline-end: var(--sp-6);
-}
-.index-header__title {
-  font-size: var(--fs-h1);
-  font-weight: var(--fw-bold);
-  color: var(--color-white);
-  line-height: var(--lh-tight);
-}
-.index-header__title[data-reveal] { transition-delay: 120ms; } /* image leads (0ms), title settles just after */
-.index-header__desc[data-reveal] { transition-delay: 220ms; } /* desc follows title — three-part sequence instead of everything moving as one flat block */
-.index-header__desc {
-  margin-top: var(--sp-3);
-  font-size: var(--fs-small);
-  color: rgba(255,255,255,0.55);
-  max-width: 360px;
-}
-.index-header__border {
-  height: 1px;
-  background: var(--color-border);
-}
-
-/* --- row list --- */
-.index-row {
-  display: block;
-  position: relative;
-  height: 96px;
-  border-bottom: 1px solid var(--color-border);
-  cursor: pointer;
-  overflow: hidden;
-  --mx: 50%;
-  --my: 50%;
-  transition: background var(--dur-base) var(--ease-out);
-}
-/* Soft warm glow that follows the cursor, layered under a faint flat tint.
-   Replaces the old flat #EFECE8 swap — that read as a mechanical on/off
-   toggle. This gives the row a "lit from where you're pointing" quality
-   instead, using only the existing border tone (#E7E3DD) at low opacity —
-   no new hues added to the locked palette, just used differently. */
-.index-row::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: radial-gradient(360px circle at var(--mx) var(--my), rgba(231, 227, 221, 0.85), transparent 70%);
-  opacity: 0;
-  transition: opacity var(--dur-slow) var(--ease-out);
-  pointer-events: none;
-}
-.index-row:hover, .index-row:focus-visible { background: #F5F3EF; }
-.index-row:hover::before, .index-row:focus-visible::before { opacity: 1; }
-.index-row.is-flash { background: var(--color-black); transition: background var(--dur-fast) linear; }
-.index-row.is-flash::before { opacity: 0; }
-
-.index-row__thumb {
-  position: absolute;
-  inset-block: 0;
-  left: 0; /* physical left, matches locked spec regardless of RTL */
-  width: 0;
-  opacity: 0;
-  transform: scale(1.04);
-  transition: width var(--dur-base) var(--ease-out),
-              opacity var(--dur-slow) var(--ease-out),
-              transform var(--dur-slow) var(--ease-out);
-  z-index: 1;
-}
-.index-row:hover .index-row__thumb { width: 420px; opacity: 1; transform: scale(1); } /* widened from 220px per review — stronger visual presence, cropping is fine. Fade+settle added so it materializes softly instead of hard-popping in with the width alone. */
-.index-row__thumb .placeholder { width: 100%; height: 100%; border-width: 0 1px 0 0; }
-
-.index-row__inner {
-  position: relative;
-  z-index: 2;
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  height: 100%;
-  display: grid;
-  align-items: center;
-  /* Fixed-width columns instead of flex + space-between. With space-between,
-     the categories column's position depended on the name-block's own
-     content width, which differs row to row — that's what produced the
-     uneven, zig-zagging left edge flagged in review. Grid tracks are fixed
-     regardless of a row's own content, so every row's category text starts
-     at the identical x position, and the arrow column stays put too.
-     Order matches the row's inherited RTL flow: first track = rightmost
-     (name), last track = leftmost (arrow). The trailing 0px track is a
-     spacer that grows on hover — see below — so the arrow/categories
-     block visibly shifts right to make room for the thumbnail growing in
-     underneath, rather than the thumbnail just overlapping the text. */
-  grid-template-columns: 460px 1fr 40px 0px;
-  column-gap: var(--sp-4);
-  transition: grid-template-columns var(--dur-base) var(--ease-out);
-}
-.index-row:hover .index-row__inner { grid-template-columns: 460px 1fr 40px 420px; }
-.index-row__name-block {
-  display: flex;
-  align-items: baseline;
-  justify-content: flex-start; /* pack the name+num pair against the column's own right edge (main-start under inherited RTL) */
-  gap: var(--sp-2);
-  /* NOTE: row-reverse here was the bug — combined with inherited direction:rtl it put the
-     number on the LEFT of the name (verified via Playwright measurement: num.right < name.left).
-     Plain "row" (default) + flex-start correctly places the first DOM child (num) at the
-     RTL main-start (physical right), with name following to its left — number tight to the
-     name's right side, matching the Figma reference. Do not reintroduce row-reverse here. */
-  min-width: 0; /* allow long names to wrap/ellipsis inside the fixed column rather than push siblings */
-}
-.index-row__num {
-  font-size: var(--fs-caption);
-  color: var(--color-text-muted);
-  font-weight: var(--fw-medium);
-  flex-shrink: 0;
-}
-.index-row__name {
-  font-size: var(--fs-h2);
-  font-weight: var(--fw-bold);
-  color: var(--color-text-primary);
-  transition: font-size var(--dur-base) var(--ease-out);
-  white-space: nowrap;
-}
-.index-row:hover .index-row__name { font-size: 2rem; /* 32px */ }
-
-.index-row__categories {
-  font-size: var(--fs-small);
-  color: var(--color-text-secondary);
-  text-align: left; /* fixed left edge, consistent across every row — see .index-row__inner note */
-  transition: opacity var(--dur-base) var(--ease-out);
-}
-.index-row:hover .index-row__categories { opacity: 0.6; }
-
-.index-row__arrow {
-  display: inline-flex;
-  justify-content: flex-start;
-  color: var(--color-border);
-  transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
-}
-.index-row:hover .index-row__arrow { color: var(--color-text-primary); transform: translateX(-6px); }
-
-/* --- footer --- */
-.index-footer {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  padding-block: var(--sp-5);
-  display: flex;
-  justify-content: space-between;
-  /* Lock physical order (year left, count right) — see Section 6a pattern */
-  direction: ltr;
-  font-size: var(--fs-micro);
-  letter-spacing: 0.05em;
-  color: var(--color-text-secondary);
-}
-.index-footer span { direction: rtl; unicode-bidi: isolate; }
-
-@media (max-width: 900px) {
-  .index-header { grid-template-columns: 1fr; height: auto; }
-  .index-header__media { display: none; } /* full mobile pass is Stage 7 */
-  .index-header__content { align-items: flex-end; padding: var(--sp-6) var(--sp-5); }
-  .index-header__title { font-size: 2.25rem; }
-  .index-row__thumb { display: none; } /* hover thumbnail is a desktop-only affordance */
-  .index-row__inner { padding-inline: var(--sp-5); grid-template-columns: 1fr 40px; } /* fixed 460px name column only makes sense at desktop widths */
-  .index-row__name { font-size: var(--fs-h2) !important; }
-  .index-row__categories { display: none; } /* reintroduce as secondary line in Stage 7 mobile pass */
-}
-
-/* =========================================================
-   ABOUT & CONTACT — final section on the page (arrives after
-   all case studies once those exist; built standalone for now,
-   no DOM-position assumptions per the locked page-structure note).
-   Structurally mirrors .hero: full-bleed grid, no .container cap,
-   physical column order locked via direction:ltr on the grid with
-   direction:rtl restored on the text column — same pattern used
-   throughout (see .hero__grid / .index-header). Proportions are
-   reversed from Hero (text 65% / photo 35%, text on the LEFT this
-   time) per the locked Figma spec, so DOM order is content-col
-   first, photo-col second.
-   ========================================================= */
-.about { background: var(--color-bg); }
-.about__grid {
-  display: grid;
-  grid-template-columns: 1fr 35%;
-  min-height: 720px;
-  /* Lock physical column order (text left, photo right) — first DOM
-     child lands left under direction:ltr, matching the Figma spec's
-     "left column = text, right column = photo" (physical, not DOM). */
-  direction: ltr;
-}
-
-.about__content-col {
-  direction: rtl; /* restore RTL context for text + logical spacing */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start; /* cross-axis start = right, under this column's rtl context */
-  padding-block: var(--sp-7);
-  /* This column sits on the physical LEFT (mirrored from Hero), bounded
-     by the photo column on its own physical right — inline-start (=
-     physical right in this rtl-restored block) just needs a plain
-     gutter here, not the viewport formula, since it never reaches the
-     true viewport edge. */
-  padding-inline-start: var(--sp-7);
-  /* inline-end (= physical left here) is the side that touches the
-     true viewport left edge, matching nav__lang's left edge — same
-     shared-edge formula used elsewhere, applied to the opposite side
-     from Hero/Index since this column is mirrored. */
-  padding-inline-end: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
-  text-align: right;
-}
-
-.about__photo-col {
-  position: relative;
-  background: var(--color-black);
-  overflow: hidden;
-}
-.about__photo-col img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.about__photo-col .placeholder { position: absolute; inset: 0; border: none; border-radius: 0; }
-
-.about__eyebrow-row { display: flex; flex-direction: column; }
-
-.about__text {
-  margin-top: var(--sp-5);
-  max-width: 460px;
-  font-size: var(--fs-body);
-  font-weight: var(--fw-regular);
-  line-height: var(--lh-loose);
-  color: var(--color-text-secondary);
-}
-.about__text--first { margin-top: var(--sp-5); }
-
-.about__rule {
-  width: 100%;
-  max-width: 460px;
-  height: 1px;
-  background: var(--color-border);
-  margin-top: var(--sp-6);
-}
-
-.about__contact-row {
-  display: flex;
-  align-items: baseline;
-  gap: var(--sp-3);
-  margin-top: var(--sp-3);
-}
-.about__contact-row:first-of-type { margin-top: var(--sp-5); }
-.about__contact-label {
-  font-size: var(--fs-caption);
-  color: var(--color-text-secondary);
-  flex-shrink: 0;
-}
-.about__contact-value {
-  font-size: var(--fs-body);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-primary);
-}
-
-/* --- closing band — belongs to this page only, not a site footer --- */
-.about__closing {
-  border-top: 1px solid var(--color-border);
-  padding-block: var(--sp-8);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--sp-4);
-}
-.about__closing-logo { color: var(--color-text-primary); }
-.about__closing-logo svg { height: 32px; width: auto; }
-.about__closing-msg {
-  font-size: var(--fs-body);
-  color: var(--color-text-primary);
-  line-height: var(--lh-loose);
-  max-width: 420px;
-}
-.about__closing-credit {
-  font-size: var(--fs-caption);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.05em;
-}
-
-@media (max-width: 900px) {
-  .about__grid { grid-template-columns: 1fr; min-height: auto; }
-  .about__photo-col { height: 360px; }
-  .about__content-col {
-    align-items: center;
-    text-align: center;
-    padding: var(--sp-7) var(--sp-5);
-  }
-  .about__text, .about__rule { margin-inline: auto; }
-  .about__contact-row { justify-content: center; }
-  .about__closing { padding-block: var(--sp-7) var(--sp-8); }
-}
-
-/* =========================================================
-   CASE STUDY TEMPLATE — VAMCO is the first build; this same
-   markup/CSS structure becomes the template for case studies
-   2–9 (built directly in code per Saeed's decision, no Figma
-   for the rest). Keep class names generic (.case-*, not
-   .vamco-*) so the template reuse is literal, not a copy-paste
-   rename exercise.
-   ========================================================= */
-
-/* --- Hero --- */
-.case-hero {
-  position: relative;
-  height: 600px; /* measured from Figma reference (~582px); round, adjustable */
-  background: var(--color-black);
-  overflow: hidden;
-}
-.case-hero__grid {
-  display: grid;
-  grid-template-columns: 50% 1fr;
-  height: 100%;
-  /* Lock physical column order (image left, text right) — same pattern
-     as .hero__grid. */
-  direction: ltr;
-}
-.case-hero__media {
-  position: relative;
-  overflow: hidden;
-}
-.case-hero__media .placeholder--on-dark { position: absolute; inset: 0; border-width: 0 1px 0 0; }
-
-.case-hero__content {
-  direction: rtl; /* restore RTL context for text + logical spacing */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start; /* cross-axis start = right, under this column's rtl context — flex-end was the bug (resolves to LEFT in rtl), matching the corrected Hero/Index pattern */
-  text-align: right;
-  padding-inline-end: var(--sp-6);
-  /* Same shared right-edge formula as Hero/Index text columns. */
-  padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
-}
-.case-hero__eyebrow-row {
-  font-size: var(--fs-caption);
-  color: rgba(255,255,255,0.55);
-  line-height: var(--lh-normal);
-}
-.case-hero__eyebrow-row span { display: block; }
-.case-hero__title {
-  margin-top: var(--sp-4);
-  font-size: clamp(3rem, 7vw, 6rem);
-  font-weight: var(--fw-bold);
-  line-height: var(--lh-tight);
-  color: var(--color-white);
-  letter-spacing: 0.01em;
-}
-.case-hero__subtitle {
-  margin-top: var(--sp-4);
-  font-size: var(--fs-h2);
-  font-weight: var(--fw-regular);
-  line-height: var(--lh-normal);
-  color: rgba(255,255,255,0.85);
-}
-.case-hero__rule {
-  width: 100%;
-  max-width: 340px;
-  height: 1px;
-  background: rgba(255,255,255,0.18);
-  margin-top: var(--sp-5);
-}
-.case-hero__meta {
-  margin-top: var(--sp-4);
-  font-size: var(--fs-small);
-  color: rgba(255,255,255,0.55);
-}
-.case-hero__scroll-hint {
-  position: absolute;
-  bottom: var(--sp-5);
-  right: var(--margin-x);
-  font-size: var(--fs-micro);
-  color: rgba(255,255,255,0.45);
-  letter-spacing: 0.03em;
-}
-
-/* --- Brief & Approach --- */
-.case-brief { background: var(--color-surface); padding-block: var(--sp-9); }
-.case-brief__grid {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-8);
-  /* Lock physical order: deliverables list left, brief text right —
-     matches the Figma reference. */
-  direction: ltr;
-}
-.case-brief__col { direction: rtl; text-align: right; }
-.case-brief__heading {
-  font-size: var(--fs-caption);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.03em;
-}
-.case-brief__text {
-  margin-top: var(--sp-4);
-  max-width: 480px;
-  margin-inline-end: auto; /* right-align the text block within its column under rtl — margin-inline-start was the bug (auto absorbs space on the side it's declared on, pushing the box toward the OPPOSITE edge) */
-  font-size: var(--fs-body-lg);
-  line-height: var(--lh-loose);
-  color: var(--color-text-secondary);
-}
-.case-brief__list {
-  margin-top: var(--sp-4);
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-}
-.case-brief__list li {
-  font-size: var(--fs-body);
-  color: var(--color-text-primary);
-}
-
-/* --- Gallery --- */
-.case-gallery { background: var(--color-bg); padding-block: var(--sp-9); }
-.case-gallery__header {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  padding-bottom: var(--sp-6);
-  text-align: right;
-  font-size: var(--fs-caption);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.03em;
-}
-.case-gallery__grid {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-5);
-}
-.case-gallery__row { display: grid; gap: var(--sp-5); }
-.case-gallery__row--full { grid-template-columns: 1fr; }
-.case-gallery__row--half { grid-template-columns: 1fr 1fr; }
-.case-gallery__row--triple { grid-template-columns: 1fr 1fr 1fr; }
-.case-gallery__row--asym {
-  grid-template-columns: 38% 1fr;
-  /* Lock physical order (portrait cell left, wide detail right) — the
-     row list's columns are symmetric everywhere else in the gallery,
-     so this is the one row where DOM order vs. inherited RTL direction
-     actually matters. Without this, the default inherited rtl from
-     <html> reverses it. */
-  direction: ltr;
-}
-
-.case-gallery__cell {
-  position: relative;
-  overflow: hidden;
-}
-.case-gallery__cell--lg { border-radius: var(--radius-md); }
-.case-gallery__cell--sm { border-radius: var(--radius-sm); }
-.case-gallery__cell .placeholder { position: absolute; inset: 0; }
-.case-gallery__cell--ratio-16-9 { aspect-ratio: 16 / 9; }
-.case-gallery__cell--ratio-4-3 { aspect-ratio: 4 / 3; }
-.case-gallery__cell--ratio-1-1 { aspect-ratio: 1 / 1; }
-.case-gallery__cell--ratio-2-3 { aspect-ratio: 2 / 3; }
-.case-gallery__cell--ratio-21-9 { aspect-ratio: 21 / 9; }
-
-.case-gallery__auto-chip {
-  position: absolute;
-  top: var(--sp-3);
-  left: var(--sp-3);
-  z-index: 2;
-  font-size: var(--fs-tiny);
-  font-weight: var(--fw-medium);
-  letter-spacing: 0.05em;
-  color: var(--color-text-secondary);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  padding: 3px var(--sp-2);
-}
-.case-gallery__dots {
-  position: absolute;
-  bottom: var(--sp-3);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  display: flex;
-  gap: 6px;
-}
-.case-gallery__dots span {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--color-text-muted);
-}
-.case-gallery__dots span:first-child { background: var(--color-text-primary); }
-
-/* --- Project nav footer --- */
-.case-nav-footer {
-  border-top: 1px solid var(--color-border);
-  background: var(--color-bg);
-}
-.case-nav-footer__inner {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  padding-block: var(--sp-5);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* Lock physical order: next-project left, counter center, prev-project
-     right — matches the Figma reference. */
-  direction: ltr;
-  font-size: var(--fs-small);
-}
-.case-nav-footer__link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-2);
-  color: var(--color-text-muted);
-  direction: rtl; /* restore natural Persian word order within the label */
-  cursor: default;
-}
-.case-nav-footer__counter {
-  color: var(--color-text-secondary);
-  font-size: var(--fs-caption);
-  direction: rtl;
-}
-
-@media (max-width: 900px) {
-  .case-hero { height: auto; min-height: 480px; }
-  .case-hero__grid { grid-template-columns: 1fr; height: auto; }
-  .case-hero__media { height: 320px; }
-  .case-hero__content { align-items: center; text-align: center; padding: var(--sp-6) var(--sp-5); }
-  .case-hero__rule { margin-inline: auto; }
-  .case-hero__scroll-hint { display: none; }
-
-  .case-brief__grid { grid-template-columns: 1fr; gap: var(--sp-6); }
-  .case-brief__text { margin-inline: auto; }
-
-  .case-gallery__row--half,
-  .case-gallery__row--triple,
-  .case-gallery__row--asym { grid-template-columns: 1fr; }
-
-  .case-nav-footer__inner { flex-wrap: wrap; gap: var(--sp-3); justify-content: center; text-align: center; }
-}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-page="home">
 
-<!-- ============ NAV ============ -->
-<nav class="nav">
-  <div class="nav__inner">
-    <span class="nav__lang">FA&nbsp;&nbsp;/&nbsp;&nbsp;EN</span>
-    <ul class="nav__links">
-      <li><a href="#hero">خانه</a></li>
-      <li><a href="#index">فهرست</a></li>
-      <li><a href="#about">درباره من</a></li>
-    </ul>
-    <a href="#hero" class="nav__logo" aria-label="سعید لواعی — صفحه اصلی">
-      <svg viewBox="0 0 175.01 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path d="M100,12.5V61.24c0,35.21-28.55,63.76-63.76,63.76h-3.23C14.78,125,0,139.78,0,158.02v29.48c0,6.9,5.6,12.5,12.5,12.5h0c6.9,0,12.5-5.6,12.5-12.5v-25c0-6.9,5.6-12.5,12.5-12.5h0c6.91,0,12.5,5.6,12.5,12.5v1.88c0,19.67,15.94,35.61,35.61,35.61h1.9c6.9,0,12.5-5.6,12.5-12.5h0c0-6.9-5.6-12.5-12.5-12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.91,5.6-12.5,12.5-12.5h50c6.9,0,12.5,5.6,12.5,12.5h0c0,6.91-5.6,12.5-12.5,12.5h0c-6.9,0-12.5,5.6-12.5,12.5h0c0,6.9,5.6,12.5,12.5,12.5h0c20.71,0,37.5-16.79,37.5-37.5h0c0-20.71-16.79-37.5-37.5-37.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9,5.6-12.5,12.5-12.5h25.01c6.9,0,12.5-5.6,12.5-12.5h0c0-6.91-5.6-12.5-12.5-12.5h-25.01c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.91,5.6-12.5,12.5-12.5h25.01c6.9,0,12.5-5.6,12.5-12.5h0c0-6.91-5.6-12.5-12.5-12.5h-25.01c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9-5.59-12.49-12.49-12.5h0c-6.9,0-12.5,5.59-12.5,12.5Z"/>
-        <path d="M75,62.5V12.5c0-6.9-5.6-12.5-12.5-12.5h0c-6.9,0-12.5,5.6-12.5,12.5h0c0,6.9-5.6,12.5-12.5,12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0C25,5.6,19.41,0,12.5,0h0C5.6,0,0,5.6,0,12.5V62.5c0,20.71,16.79,37.5,37.5,37.5h0c20.71,0,37.5-16.79,37.5-37.5Zm-37.5-12.5h0c6.9,0,12.5,5.6,12.5,12.5h0c0,6.91-5.6,12.5-12.5,12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9,5.6-12.5,12.5-12.5Z"/>
-      </svg>
-    </a>
-  </div>
-</nav>
+<!-- ============ NAV (injected by nav.js) ============ -->
+<div id="site-nav"></div>
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="hero">
   <div class="hero__grid">
 
     <div class="hero__illu-col">
-      <video class="hero__video" src="assets/video/hero-character.mp4" autoplay muted loop playsinline data-reveal></video>
+      <video class="hero__video" src="assets/video/hero-character.mp4" autoplay muted loop playsinline></video>
     </div>
 
     <div class="hero__content-col">
-      <p class="hero__eyebrow" data-reveal>طراح گرافیک ارشد</p>
-      <div class="hero__deco-line" data-reveal></div>
-      <h1 class="hero__name" data-reveal>سعید لواعی</h1>
-      <p class="hero__bio" data-reveal>[ متن معرفی کوتاه — ۳ تا ۴ خط. توضیح مختصر درباره رویکرد طراحی، تخصص و نقاط تمایز. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
-      <div class="hero__stats" data-reveal>
+      <p class="hero__eyebrow">طراح گرافیک ارشد</p>
+      <div class="hero__deco-line"></div>
+      <h1 class="hero__name">سعید لواعی</h1>
+      <p class="hero__bio">[ متن معرفی کوتاه — ۳ تا ۴ خط. توضیح مختصر درباره رویکرد طراحی، تخصص و نقاط تمایز. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+      <div class="hero__stats">
         <div class="hero__stat">
           <span class="hero__stat-num">۷</span>
           <span class="hero__stat-label">سال تجربه</span>
@@ -1086,7 +39,7 @@ a { color: inherit; text-decoration: none; }
           <span class="hero__stat-label">شرکت / برند</span>
         </div>
       </div>
-      <a href="#index" class="hero__cta" data-reveal>
+      <a href="#index" class="hero__cta">
         <span>برو بریم</span>
         <span class="hero__cta-arrow">↓</span>
       </a>
@@ -1096,16 +49,18 @@ a { color: inherit; text-decoration: none; }
 
 <div class="section-divider section-divider--tight section-divider--accent"></div>
 
-<!-- ============ PROJECT INDEX ============ -->
+<!-- ============ PROJECT INDEX ============
+     Legacy row-list layout — Stage 2 rebuilds this to the new
+     paired image-grid pattern from Figma Page 3. -->
 <section class="project-index" id="index">
 
   <div class="index-header">
     <div class="index-header__media">
-      <img src="assets/img/index-projects-header.webp" alt="" data-reveal-img>
+      <img src="assets/img/index-projects-header.webp" alt="">
     </div>
     <div class="index-header__content">
-      <span class="index-header__title" data-reveal>پروژه‌ها</span>
-      <p class="index-header__desc" data-reveal>نه پروژه منتخب از هفت سال طراحی هویت بصری، چاپ و کمپین دیجیتال</p>
+      <span class="index-header__title">پروژه‌ها</span>
+      <p class="index-header__desc">نه پروژه منتخب از هفت سال طراحی هویت بصری، چاپ و کمپین دیجیتال</p>
     </div>
   </div>
   <div class="index-header__border"></div>
@@ -1119,13 +74,14 @@ a { color: inherit; text-decoration: none; }
 
 </section>
 
-<!-- Case studies 2–9 (Stage 3 continued) will be inserted here, after
-     VAMCO, once VAMCO is reviewed/approved as the template — About &
-     Contact remains the LAST section on the page regardless. -->
+<!-- Case studies will move to their own dedicated pages (Stage 3+).
+     VAMCO stays embedded here for now until that page exists. -->
 
 <div class="section-divider section-divider--tight section-divider--accent"></div>
 
-<!-- ============ CASE STUDY: VAMCO ============ -->
+<!-- ============ CASE STUDY: VAMCO ============
+     Legacy 5-row gallery — Stage 3 rebuilds this to the new
+     uniform 16:9-row system and moves it to its own vamco.html. -->
 <section class="case-study" id="vamco">
 
   <div class="case-hero">
@@ -1228,38 +184,37 @@ a { color: inherit; text-decoration: none; }
 
 </section>
 
-<!-- Case studies 3–9 (Stage 3 continued) will be inserted here, once
-     VAMCO is reviewed/approved as the template — About & Contact
-     remains the LAST section on the page regardless. -->
-
 <div class="section-divider section-divider--tight section-divider--accent"></div>
 
-<!-- ============ ABOUT & CONTACT ============ -->
+<!-- ============ ABOUT & CONTACT ============
+     Legacy proportions — Stage 2 adjusts sizing per the new
+     Figma frame. Old page-specific closing band removed —
+     footer is now shared (see #site-footer at the bottom). -->
 <section class="about" id="about">
   <div class="about__grid">
 
     <div class="about__content-col">
-      <p class="hero__eyebrow" data-reveal>درباره و تماس</p>
-      <div class="hero__deco-line" data-reveal></div>
+      <p class="hero__eyebrow">درباره و تماس</p>
+      <div class="hero__deco-line"></div>
 
-      <p class="about__text about__text--first" data-reveal>[ متن معرفی کوتاه — ۳ تا ۴ خط. توضیح مختصر درباره پیشینه، حوزه تخصص و مسیر حرفه‌ای. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+      <p class="about__text about__text--first">[ متن معرفی کوتاه — ۳ تا ۴ خط. توضیح مختصر درباره پیشینه، حوزه تخصص و مسیر حرفه‌ای. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
 
-      <p class="about__text" data-reveal>[ توضیح رویکرد طراحی و نقاط تمایز — ۲ تا ۳ خط. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+      <p class="about__text">[ توضیح رویکرد طراحی و نقاط تمایز — ۲ تا ۳ خط. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
 
-      <div class="about__rule" data-reveal></div>
+      <div class="about__rule"></div>
 
-      <p class="about__text" data-reveal>[ وضعیت همکاری — مثلاً «در حال حاضر آماده همکاری تمام‌وقت و پروژه‌های فریلنس» ]</p>
+      <p class="about__text">[ وضعیت همکاری — مثلاً «در حال حاضر آماده همکاری تمام‌وقت و پروژه‌های فریلنس» ]</p>
 
-      <div class="about__contact-row" data-reveal>
+      <div class="about__contact-row">
         <span class="about__contact-label">ایمیل</span>
         <span class="about__contact-value">[ ایمیل ]</span>
       </div>
-      <div class="about__contact-row" data-reveal>
+      <div class="about__contact-row">
         <span class="about__contact-label">لینکدین</span>
         <span class="about__contact-value">[ لینکدین ]</span>
       </div>
 
-      <a href="#" class="hero__cta" data-reveal>
+      <a href="#" class="hero__cta">
         <span>تماس بگیرید</span>
         <span class="hero__cta-arrow">←</span>
       </a>
@@ -1272,51 +227,19 @@ a { color: inherit; text-decoration: none; }
     </div>
 
   </div>
-
-  <div class="about__closing">
-    <div class="about__closing-logo" aria-hidden="true">
-      <svg viewBox="0 0 175.01 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path d="M100,12.5V61.24c0,35.21-28.55,63.76-63.76,63.76h-3.23C14.78,125,0,139.78,0,158.02v29.48c0,6.9,5.6,12.5,12.5,12.5h0c6.9,0,12.5-5.6,12.5-12.5v-25c0-6.9,5.6-12.5,12.5-12.5h0c6.91,0,12.5,5.6,12.5,12.5v1.88c0,19.67,15.94,35.61,35.61,35.61h1.9c6.9,0,12.5-5.6,12.5-12.5h0c0-6.9-5.6-12.5-12.5-12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.91,5.6-12.5,12.5-12.5h50c6.9,0,12.5,5.6,12.5,12.5h0c0,6.91-5.6,12.5-12.5,12.5h0c-6.9,0-12.5,5.6-12.5,12.5h0c0,6.9,5.6,12.5,12.5,12.5h0c20.71,0,37.5-16.79,37.5-37.5h0c0-20.71-16.79-37.5-37.5-37.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9,5.6-12.5,12.5-12.5h25.01c6.9,0,12.5-5.6,12.5-12.5h0c0-6.91-5.6-12.5-12.5-12.5h-25.01c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.91,5.6-12.5,12.5-12.5h25.01c6.9,0,12.5-5.6,12.5-12.5h0c0-6.91-5.6-12.5-12.5-12.5h-25.01c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9-5.59-12.49-12.49-12.5h0c-6.9,0-12.5,5.59-12.5,12.5Z"/>
-        <path d="M75,62.5V12.5c0-6.9-5.6-12.5-12.5-12.5h0c-6.9,0-12.5,5.6-12.5,12.5h0c0,6.9-5.6,12.5-12.5,12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0C25,5.6,19.41,0,12.5,0h0C5.6,0,0,5.6,0,12.5V62.5c0,20.71,16.79,37.5,37.5,37.5h0c20.71,0,37.5-16.79,37.5-37.5Zm-37.5-12.5h0c6.9,0,12.5,5.6,12.5,12.5h0c0,6.91-5.6,12.5-12.5,12.5h0c-6.9,0-12.5-5.6-12.5-12.5h0c0-6.9,5.6-12.5,12.5-12.5Z"/>
-      </svg>
-    </div>
-    <p class="about__closing-msg">از این‌که وقت گذاشتید و تا انتها همراه بودید ممنونم.<br>خوشحال می‌شوم درباره پروژه بعدی صحبت کنیم.</p>
-    <p class="about__closing-credit">سعید لواعی · طراح گرافیک ارشد</p>
-  </div>
 </section>
 
+<!-- ============ FOOTER (shared, injected by footer.js) ============ -->
+<div id="site-footer"></div>
+
+<script src="nav.js"></script>
+<script src="footer.js"></script>
 <script>
-// Reveal-on-load for hero (orchestrated, staggered)
-document.addEventListener('DOMContentLoaded', () => {
-  const heroReveals = document.querySelectorAll('.hero [data-reveal]');
-  heroReveals.forEach((el, i) => {
-    setTimeout(() => el.classList.add('is-visible'), 80 * i);
-  });
-});
-
-// Reusable scroll-reveal observer for future sections (Stage 2+)
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('[data-reveal]:not(.hero [data-reveal]), [data-reveal-img]:not(.hero [data-reveal-img])').forEach(el => {
-  revealObserver.observe(el);
-});
-
 /* =========================================================
-   PROJECT INDEX — data-driven row list
-   This same array will later feed the case-study "Prev/Next"
-   navigation (Stage 3) — single source of truth, not duplicated.
-   Names/categories per Saeed's Aug 2026 content revision (Persian
-   phonetic project names, replacing the earlier Latin/mixed set).
-   Row thumbnails (`thumb`) are optional — only VAMCO has a real
-   asset so far; other rows fall back to the placeholder until
-   their assets arrive.
+   PROJECT INDEX — data-driven row list (unchanged logic,
+   just the click-flash animation removed per this phase's
+   no-animation scope; links with a real href now navigate
+   normally, "#" placeholders do nothing).
    ========================================================= */
 const PROJECTS = [
   { num: '۰۱', name: 'ومکو', cats: 'هویت بصری · راهنمای برند · چاپ', thumb: 'assets/img/vamco-index-thumb.webp', href: '#vamco' },
@@ -1331,12 +254,10 @@ const PROJECTS = [
 ];
 
 const listEl = document.getElementById('index-list');
-PROJECTS.forEach((p, i) => {
+PROJECTS.forEach((p) => {
   const row = document.createElement('a');
   row.href = p.href;
   row.className = 'index-row';
-  row.setAttribute('data-reveal', '');
-  row.style.transitionDelay = (i * 60) + 'ms';
   const thumbInner = p.thumb
     ? `<img src="${p.thumb}" alt="" style="width:100%;height:100%;object-fit:cover;">`
     : `<div class="placeholder" style="width:100%;height:100%;"><span class="placeholder__label">پیش‌نمایش</span></div>`;
@@ -1351,30 +272,10 @@ PROJECTS.forEach((p, i) => {
       <span class="index-row__arrow">←</span>
     </div>
   `;
-  // Click-flash — visual confirmation only for now; real case-study
-  // navigation gets wired in as Stage 3 pages exist.
   row.addEventListener('click', (e) => {
-    if (p.href === '#') {
-      e.preventDefault();
-      row.classList.add('is-flash');
-      setTimeout(() => row.classList.remove('is-flash'), 150);
-    }
+    if (p.href === '#') e.preventDefault();
   });
   listEl.appendChild(row);
-});
-
-document.querySelectorAll('#index-list [data-reveal]').forEach(el => revealObserver.observe(el));
-
-// Cursor-tracked warm glow on row hover (single delegated listener, not one
-// per row — cheap regardless of project count). Sets --mx/--my as percentages
-// so the radial-gradient in CSS follows the pointer within each row.
-const indexList = document.getElementById('index-list');
-indexList.addEventListener('pointermove', (e) => {
-  const row = e.target.closest('.index-row');
-  if (!row) return;
-  const rect = row.getBoundingClientRect();
-  row.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
-  row.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
 });
 </script>
 
