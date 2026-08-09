@@ -821,7 +821,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-end; /* right-align within this column */
+  align-items: flex-start; /* cross-axis start = right, under this column's rtl context — flex-end was the bug (resolves to LEFT in rtl), matching the corrected Hero/Index pattern */
   text-align: right;
   padding-inline-end: var(--sp-6);
   /* Same shared right-edge formula as Hero/Index text columns. */
@@ -892,7 +892,7 @@ a { color: inherit; text-decoration: none; }
 .case-brief__text {
   margin-top: var(--sp-4);
   max-width: 480px;
-  margin-inline-start: auto; /* right-align the text block within its column under rtl */
+  margin-inline-end: auto; /* right-align the text block within its column under rtl — margin-inline-start was the bug (auto absorbs space on the side it's declared on, pushing the box toward the OPPOSITE edge) */
   font-size: var(--fs-body-lg);
   line-height: var(--lh-loose);
   color: var(--color-text-secondary);
@@ -1146,7 +1146,6 @@ a { color: inherit; text-decoration: none; }
         <p class="case-hero__meta">استودیو صنعت شریف · ۱۴۰۰–۱۴۰۲ · هویت برند · چاپ · نمایشگاه</p>
       </div>
     </div>
-    <span class="case-hero__scroll-hint">برای ادامه اسکرول کنید</span>
   </div>
 
   <div class="case-brief">
