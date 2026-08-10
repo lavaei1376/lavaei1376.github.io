@@ -176,41 +176,58 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* =========================================================
-   HERO
+   HERO — Stage 2 rebuild per the new Figma export ("Home
+   page" frame). Two real changes from the old full-viewport
+   version: (1) fixed compact height instead of 100vh — this
+   is now one section among several on a normal scrolling
+   page, not a full-screen intro slide; (2) the illustration
+   is a CONTAINED, rounded, inset panel (matches the card
+   language used everywhere else — project thumbnails, About
+   photo — instead of the old edge-to-edge full-bleed dark
+   panel. No CTA button here anymore (dropped per Saeed —
+   Project Index and nav links already provide the way in).
+   Text order also flipped: name leads, small role label sits
+   under it (not above), confirmed against the export.
    ========================================================= */
 .hero {
   position: relative;
   padding-top: var(--nav-h);
-  height: 100vh;
-  min-height: 600px;
+  height: 723px;
   background: var(--color-bg);
   overflow: hidden;
 }
 .hero__grid {
   display: grid;
   grid-template-columns: 48% 1fr;
-  height: calc(100vh - var(--nav-h));
-  min-height: calc(600px - var(--nav-h));
+  column-gap: var(--sp-8);
+  align-items: center;
+  height: calc(723px - var(--nav-h));
   direction: ltr;
 }
-.hero__illu-col { position: relative; background: var(--color-black); overflow: hidden; }
+.hero__illu-col {
+  position: relative;
+  height: calc(100% - var(--sp-8) * 2);
+  margin-inline-start: var(--margin-x);
+  border-radius: var(--radius-lg);
+  background: var(--color-black);
+  overflow: hidden;
+}
 .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 .hero__content-col {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
-  padding-block: var(--sp-7);
   padding-inline-end: var(--margin-x);
-  padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
+  padding-inline-start: max(var(--sp-8), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
   text-align: right;
   direction: rtl;
 }
-.hero__eyebrow { font-size: var(--fs-caption); font-weight: var(--fw-medium); color: var(--color-text-secondary); letter-spacing: 0.05em; }
-.hero__deco-line { width: 100%; max-width: 260px; height: 1px; background: var(--color-border); margin: var(--sp-2) 0 0 auto; }
 .hero__name { font-size: var(--fs-display); font-weight: var(--fw-bold); line-height: var(--lh-tight); margin: 0; }
+.hero__eyebrow { margin-top: var(--sp-3); font-size: var(--fs-caption); font-weight: var(--fw-medium); color: var(--color-text-secondary); letter-spacing: 0.05em; }
+.hero__deco-line { width: 100%; max-width: 220px; height: 1px; background: var(--color-border); margin: var(--sp-3) 0 0 auto; }
 .hero__bio { margin-top: var(--sp-5); max-width: 460px; font-size: var(--fs-body); line-height: var(--lh-loose); color: var(--color-text-secondary); }
+.hero__rule { width: 100%; max-width: 460px; height: 1px; background: var(--color-border); margin-top: var(--sp-6); }
 
 .hero__cta {
   display: inline-flex;
@@ -234,11 +251,11 @@ a { color: inherit; text-decoration: none; }
 .hero__stat-label { display: block; margin-top: var(--sp-2); font-size: var(--fs-caption); color: var(--color-text-secondary); }
 
 @media (max-width: 900px) {
-  .hero__grid { grid-template-columns: 1fr; }
-  .hero__illu-col { min-height: 420px; }
-  .hero__content-col { text-align: center; align-items: center; padding: var(--sp-7) var(--sp-5); }
-  .hero__deco-line, .hero__bio, .hero__stats { margin-inline: auto; }
-  .hero__cta { margin-inline: auto; }
+  .hero { height: auto; }
+  .hero__grid { grid-template-columns: 1fr; height: auto; padding-block: var(--sp-6); }
+  .hero__illu-col { height: 320px; margin: 0 var(--sp-5); }
+  .hero__content-col { text-align: center; align-items: center; padding: var(--sp-7) var(--sp-5) 0; }
+  .hero__deco-line, .hero__bio, .hero__rule, .hero__stats { margin-inline: auto; }
   .nav__links { display: none; }
   :root { --margin-x: 24px; }
 }
@@ -272,116 +289,130 @@ a { color: inherit; text-decoration: none; }
 .placeholder--on-dark .placeholder__label { color: rgba(255,255,255,0.55); background: transparent; }
 
 /* =========================================================
-   PROJECT INDEX (legacy row-list version — Stage 2 will
-   replace this with the new paired image-grid layout from
-   Figma. Left in place, de-animated, so the Home page still
-   works between now and Stage 2.)
+   PROJECT INDEX — Stage 2 rebuild. Replaces the old full-width
+   row-list (image only on hover) with the new paired 2-up
+   thumbnail grid confirmed against the "Home page" Figma
+   export: every project gets a real, always-visible 632×474
+   thumbnail (matching the card language used everywhere else
+   on the site — same size as the About photo), with its
+   name/number + category tags directly underneath. No more
+   black header band — the section intro sits directly on the
+   page background. 9 projects → four paired rows + one final
+   single row (the odd one out), reading right-to-left in DOM
+   order, no direction override needed since paired columns
+   are visually interchangeable.
    ========================================================= */
 .project-index { background: var(--color-bg); }
 
-.index-header {
-  display: grid;
-  grid-template-columns: 48% 1fr;
-  height: 240px;
-  background: var(--color-black);
-  overflow: hidden;
-  direction: ltr;
+.index-intro {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-block: var(--sp-9) var(--sp-7);
+  text-align: right;
 }
-.index-header__media { position: relative; height: 100%; overflow: hidden; }
-.index-header__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
-.index-header__content {
-  direction: rtl;
+.index-intro__title { font-size: var(--fs-h1); font-weight: var(--fw-bold); margin: 0; }
+.index-intro__desc { margin-top: var(--sp-3); margin-inline-start: auto; max-width: 560px; font-size: var(--fs-body); color: var(--color-text-secondary); }
+
+.index-grid {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  text-align: right;
-  padding-inline-start: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
-  padding-inline-end: var(--sp-6);
 }
-.index-header__title { font-size: var(--fs-h1); font-weight: var(--fw-bold); color: var(--color-white); line-height: var(--lh-tight); }
-.index-header__desc { margin-top: var(--sp-3); font-size: var(--fs-small); color: rgba(255,255,255,0.55); max-width: 360px; }
-.index-header__border { height: 1px; background: var(--color-border); }
-
 .index-row {
-  display: block;
-  position: relative;
-  height: 96px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-7);
+  padding-block: var(--sp-8);
   border-bottom: 1px solid var(--color-border);
-  cursor: pointer;
+}
+.index-row:first-child { padding-top: 0; }
+.index-row--single { grid-template-columns: 1fr 1fr; }
+.index-row--single .index-item { grid-column: 1; }
+
+.index-item { display: block; }
+.index-item__thumb-wrap {
+  position: relative;
+  aspect-ratio: 632 / 474;
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
-.index-row:hover, .index-row:focus-visible { background: #F5F3EF; }
+.index-item__thumb-wrap .placeholder,
+.index-item__thumb-wrap img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-.index-row__thumb { position: absolute; inset-block: 0; left: 0; width: 0; opacity: 0; }
-.index-row:hover .index-row__thumb { width: 420px; opacity: 1; }
-.index-row__thumb .placeholder { width: 100%; height: 100%; border-width: 0 1px 0 0; }
-
-.index-row__inner {
-  position: relative;
-  z-index: 2;
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  height: 100%;
-  display: grid;
-  align-items: center;
-  grid-template-columns: 460px 1fr 40px 0px;
-  column-gap: var(--sp-4);
-}
-.index-row:hover .index-row__inner { grid-template-columns: 460px 1fr 40px 420px; }
-.index-row__name-block { display: flex; align-items: baseline; justify-content: flex-start; gap: var(--sp-2); min-width: 0; }
-.index-row__num { font-size: var(--fs-caption); color: var(--color-text-muted); font-weight: var(--fw-medium); flex-shrink: 0; }
-.index-row__name { font-size: var(--fs-h2); font-weight: var(--fw-bold); color: var(--color-text-primary); white-space: nowrap; }
-.index-row__categories { font-size: var(--fs-small); color: var(--color-text-secondary); text-align: left; }
-.index-row__arrow { display: inline-flex; justify-content: flex-start; color: var(--color-border); }
-.index-row:hover .index-row__arrow { color: var(--color-text-primary); }
-
-.index-footer {
-  max-width: var(--content-max);
-  margin-inline: auto;
-  padding-inline: var(--margin-x);
-  padding-block: var(--sp-5);
+.index-item__meta {
+  margin-top: var(--sp-4);
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  direction: ltr;
-  font-size: var(--fs-micro);
-  letter-spacing: 0.05em;
-  color: var(--color-text-secondary);
+  direction: rtl;
+  gap: var(--sp-4);
 }
-.index-footer span { direction: rtl; unicode-bidi: isolate; }
+.index-item__name-block { display: flex; align-items: baseline; gap: var(--sp-2); flex-shrink: 0; }
+.index-item__num { font-size: var(--fs-caption); color: var(--color-text-muted); font-weight: var(--fw-medium); }
+.index-item__name { font-size: var(--fs-h2); font-weight: var(--fw-bold); color: var(--color-text-primary); white-space: nowrap; }
+.index-item__cats {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+  font-size: var(--fs-small);
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+.index-item__arrow { flex-shrink: 0; color: var(--color-text-muted); }
+.index-item:hover .index-item__name { color: var(--color-text-primary); }
+.index-item:hover .index-item__arrow { color: var(--color-text-primary); }
 
 @media (max-width: 900px) {
-  .index-header { grid-template-columns: 1fr; height: auto; }
-  .index-header__media { display: none; }
-  .index-header__content { align-items: flex-end; padding: var(--sp-6) var(--sp-5); }
-  .index-header__title { font-size: 2.25rem; }
-  .index-row__thumb { display: none; }
-  .index-row__inner { padding-inline: var(--sp-5); grid-template-columns: 1fr 40px; }
-  .index-row__name { font-size: var(--fs-h2) !important; }
-  .index-row__categories { display: none; }
+  .index-intro { padding-block: var(--sp-7) var(--sp-6); }
+  .index-intro__title { font-size: 2.25rem; }
+  .index-row { grid-template-columns: 1fr; gap: var(--sp-6); padding-block: var(--sp-6); }
+  .index-row--single .index-item { grid-column: 1; }
+  .index-item__cats { display: none; } /* full mobile pass reintroduces this — Stage 7 */
 }
 
 /* =========================================================
-   ABOUT & CONTACT (legacy proportions — Stage 2 will adjust
-   sizing/positions per the new Figma frame)
+   ABOUT & CONTACT — Stage 2 recompose per the new Figma
+   export. No longer a full-height 65/35 split with the photo
+   stretching the whole section — content now reads as a
+   compact stacked block (bio → approach → rule → availability
+   → email → LinkedIn → CTA) on the right, with the portrait
+   photo sized to the SAME 632×474 block used for project
+   thumbnails (visual consistency with the Index grid above
+   it) and bottom-aligned against the text column rather than
+   spanning the full section height.
+   LinkedIn line + CTA button confirmed KEPT (Saeed, this
+   session) even though the Figma export didn't show them —
+   don't drop these on a future Figma-vs-doc conflict without
+   checking back first.
    ========================================================= */
-.about { background: var(--color-bg); }
-.about__grid { display: grid; grid-template-columns: 1fr 35%; min-height: 720px; direction: ltr; }
-.about__content-col {
-  direction: rtl;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding-block: var(--sp-7);
-  padding-inline-start: var(--sp-7);
-  padding-inline-end: max(var(--margin-x), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
-  text-align: right;
+.about { background: var(--color-bg); padding-block: var(--sp-9) var(--sp-10); }
+.about__inner {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  display: grid;
+  grid-template-columns: 1fr 632px;
+  column-gap: var(--sp-9);
+  align-items: end;
+  direction: ltr;
 }
-.about__photo-col { position: relative; background: var(--color-black); overflow: hidden; }
+.about__content-col { direction: rtl; text-align: right; }
+.about__photo-col {
+  position: relative;
+  width: 632px;
+  height: 474px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-black);
+}
 .about__photo-col img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.about__photo-col .placeholder { position: absolute; inset: 0; border: none; border-radius: 0; }
+.about__photo-col .placeholder { position: absolute; inset: 0; }
 .about__text { margin-top: var(--sp-5); max-width: 460px; font-size: var(--fs-body); line-height: var(--lh-loose); color: var(--color-text-secondary); }
 .about__rule { width: 100%; max-width: 460px; height: 1px; background: var(--color-border); margin-top: var(--sp-6); }
 .about__contact-row { display: flex; align-items: baseline; gap: var(--sp-3); margin-top: var(--sp-3); }
@@ -390,9 +421,10 @@ a { color: inherit; text-decoration: none; }
 .about__contact-value { font-size: var(--fs-body); font-weight: var(--fw-medium); color: var(--color-text-primary); }
 
 @media (max-width: 900px) {
-  .about__grid { grid-template-columns: 1fr; min-height: auto; }
-  .about__photo-col { height: 360px; }
-  .about__content-col { align-items: center; text-align: center; padding: var(--sp-7) var(--sp-5); }
+  .about { padding-block: var(--sp-7); }
+  .about__inner { grid-template-columns: 1fr; direction: rtl; row-gap: var(--sp-7); padding-inline: var(--sp-5); }
+  .about__photo-col { width: 100%; height: auto; aspect-ratio: 632 / 474; }
+  .about__content-col { text-align: center; align-items: center; }
   .about__text, .about__rule { margin-inline: auto; }
   .about__contact-row { justify-content: center; }
 }

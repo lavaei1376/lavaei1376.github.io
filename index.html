@@ -21,10 +21,11 @@
     </div>
 
     <div class="hero__content-col">
+      <h1 class="hero__name">سعید لواعی</h1>
       <p class="hero__eyebrow">طراح گرافیک ارشد</p>
       <div class="hero__deco-line"></div>
-      <h1 class="hero__name">سعید لواعی</h1>
       <p class="hero__bio">[ متن معرفی کوتاه — ۳ تا ۴ خط. توضیح مختصر درباره رویکرد طراحی، تخصص و نقاط تمایز. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+      <div class="hero__rule"></div>
       <div class="hero__stats">
         <div class="hero__stat">
           <span class="hero__stat-num">۷</span>
@@ -39,10 +40,6 @@
           <span class="hero__stat-label">شرکت / برند</span>
         </div>
       </div>
-      <a href="#index" class="hero__cta">
-        <span>برو بریم</span>
-        <span class="hero__cta-arrow">↓</span>
-      </a>
     </div>
   </div>
 </section>
@@ -50,27 +47,17 @@
 <div class="section-divider section-divider--tight section-divider--accent"></div>
 
 <!-- ============ PROJECT INDEX ============
-     Legacy row-list layout — Stage 2 rebuilds this to the new
-     paired image-grid pattern from Figma Page 3. -->
+     Stage 2: paired 2-up thumbnail grid, built from the
+     PROJECTS array at the bottom of the page (single source
+     of truth, shared with future case-study prev/next nav). -->
 <section class="project-index" id="index">
 
-  <div class="index-header">
-    <div class="index-header__media">
-      <img src="assets/img/index-projects-header.webp" alt="">
-    </div>
-    <div class="index-header__content">
-      <span class="index-header__title">پروژه‌ها</span>
-      <p class="index-header__desc">نه پروژه منتخب از هفت سال طراحی هویت بصری، چاپ و کمپین دیجیتال</p>
-    </div>
+  <div class="index-intro">
+    <h2 class="index-intro__title">پروژه‌های من</h2>
+    <p class="index-intro__desc">نه پروژه منتخب از هفت سال طراحی هویت بصری، چاپ و کمپین دیجیتال</p>
   </div>
-  <div class="index-header__border"></div>
 
-  <div class="index-list" id="index-list"></div>
-
-  <div class="index-footer">
-    <span>۱۳۹۷ — ۱۴۰۵</span>
-    <span>۹ پروژه</span>
-  </div>
+  <div class="index-grid" id="index-grid"></div>
 
 </section>
 
@@ -191,7 +178,7 @@
      Figma frame. Old page-specific closing band removed —
      footer is now shared (see #site-footer at the bottom). -->
 <section class="about" id="about">
-  <div class="about__grid">
+  <div class="about__inner">
 
     <div class="about__content-col">
       <p class="hero__eyebrow">درباره و تماس</p>
@@ -236,10 +223,12 @@
 <script src="footer.js"></script>
 <script>
 /* =========================================================
-   PROJECT INDEX — data-driven row list (unchanged logic,
-   just the click-flash animation removed per this phase's
-   no-animation scope; links with a real href now navigate
-   normally, "#" placeholders do nothing).
+   PROJECT INDEX — Stage 2: paired 2-up thumbnail grid.
+   Single source of truth for project data, shared with the
+   future case-study prev/next nav (Stage 3+). Grouped two at
+   a time into rows; odd project count (9) means the last row
+   gets one item, placed in the first (rightmost, under RTL)
+   grid column via .index-row--single.
    ========================================================= */
 const PROJECTS = [
   { num: '۰۱', name: 'ومکو', cats: 'هویت بصری · راهنمای برند · چاپ', thumb: 'assets/img/vamco-index-thumb.webp', href: '#vamco' },
@@ -253,30 +242,40 @@ const PROJECTS = [
   { num: '۰۹', name: 'کولی کافه', cats: 'لوگو', href: '#' },
 ];
 
-const listEl = document.getElementById('index-list');
-PROJECTS.forEach((p) => {
-  const row = document.createElement('a');
-  row.href = p.href;
-  row.className = 'index-row';
+function renderIndexItem(p) {
   const thumbInner = p.thumb
-    ? `<img src="${p.thumb}" alt="" style="width:100%;height:100%;object-fit:cover;">`
-    : `<div class="placeholder" style="width:100%;height:100%;"><span class="placeholder__label">پیش‌نمایش</span></div>`;
-  row.innerHTML = `
-    <div class="index-row__thumb">${thumbInner}</div>
-    <div class="index-row__inner">
-      <div class="index-row__name-block">
-        <span class="index-row__num">${p.num}</span>
-        <span class="index-row__name">${p.name}</span>
+    ? `<img src="${p.thumb}" alt="">`
+    : `<div class="placeholder"><span class="placeholder__label">پیش‌نمایش</span></div>`;
+  const item = document.createElement('a');
+  item.href = p.href;
+  item.className = 'index-item';
+  item.innerHTML = `
+    <div class="index-item__thumb-wrap">${thumbInner}</div>
+    <div class="index-item__meta">
+      <div class="index-item__name-block">
+        <span class="index-item__num">${p.num}</span>
+        <span class="index-item__name">${p.name}</span>
       </div>
-      <span class="index-row__categories">${p.cats}</span>
-      <span class="index-row__arrow">←</span>
+      <div class="index-item__cats">
+        <span>${p.cats}</span>
+        <span class="index-item__arrow">←</span>
+      </div>
     </div>
   `;
-  row.addEventListener('click', (e) => {
+  item.addEventListener('click', (e) => {
     if (p.href === '#') e.preventDefault();
   });
-  listEl.appendChild(row);
-});
+  return item;
+}
+
+const gridEl = document.getElementById('index-grid');
+for (let i = 0; i < PROJECTS.length; i += 2) {
+  const pair = PROJECTS.slice(i, i + 2);
+  const row = document.createElement('div');
+  row.className = 'index-row' + (pair.length === 1 ? ' index-row--single' : '');
+  pair.forEach((p) => row.appendChild(renderIndexItem(p)));
+  gridEl.appendChild(row);
+}
 </script>
 
 </body>
