@@ -430,13 +430,25 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* =========================================================
-   CASE STUDY TEMPLATE (VAMCO — Stage 3 will rebuild the
-   gallery to the new uniform 16:9-row system; left as-is
-   structurally for now, de-animated only)
+   CASE STUDY TEMPLATE — Stage 3 rebuild. VAMCO is the first
+   real page built from this template (own vamco.html, no
+   longer embedded in the Home page) and it becomes the literal
+   template for cases 2–9: generic .case-* class names, not
+   .vamco-*. Two structural changes from the old embedded
+   version, per the new Figma export: (1) gallery simplified
+   from a 5-row VARIED grid (full/half/triple/asym/cinematic)
+   to UNIFORM stacked 16:9 rows — same system for every future
+   case study, only row count varies per project; (2) no more
+   page-local prev/next footer — every case-study page just
+   ends into the shared site footer (nav.js/footer.js), same
+   as Home. .case-hero__media now also supports a real <img>
+   (VAMCO has one), not just the placeholder — future case
+   studies without assets yet fall back to placeholder--on-dark.
    ========================================================= */
 .case-hero { position: relative; height: 600px; background: var(--color-black); overflow: hidden; }
 .case-hero__grid { display: grid; grid-template-columns: 50% 1fr; height: 100%; direction: ltr; }
 .case-hero__media { position: relative; overflow: hidden; }
+.case-hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .case-hero__media .placeholder--on-dark { position: absolute; inset: 0; border-width: 0 1px 0 0; }
 .case-hero__content {
   direction: rtl;
@@ -454,7 +466,6 @@ a { color: inherit; text-decoration: none; }
 .case-hero__subtitle { margin-top: var(--sp-4); font-size: var(--fs-h2); font-weight: var(--fw-regular); line-height: var(--lh-normal); color: rgba(255,255,255,0.85); }
 .case-hero__rule { width: 100%; max-width: 340px; height: 1px; background: rgba(255,255,255,0.18); margin-top: var(--sp-5); }
 .case-hero__meta { margin-top: var(--sp-4); font-size: var(--fs-small); color: rgba(255,255,255,0.55); }
-.case-hero__scroll-hint { position: absolute; bottom: var(--sp-5); right: var(--margin-x); font-size: var(--fs-micro); color: rgba(255,255,255,0.45); letter-spacing: 0.03em; }
 
 .case-brief { background: var(--color-surface); padding-block: var(--sp-9); }
 .case-brief__grid { max-width: var(--content-max); margin-inline: auto; padding-inline: var(--margin-x); display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-8); direction: ltr; }
@@ -467,29 +478,18 @@ a { color: inherit; text-decoration: none; }
 .case-gallery { background: var(--color-bg); padding-block: var(--sp-9); }
 .case-gallery__header { max-width: var(--content-max); margin-inline: auto; padding-inline: var(--margin-x); padding-bottom: var(--sp-6); text-align: right; font-size: var(--fs-caption); font-weight: var(--fw-medium); color: var(--color-text-secondary); letter-spacing: 0.03em; }
 .case-gallery__grid { max-width: var(--content-max); margin-inline: auto; padding-inline: var(--margin-x); display: flex; flex-direction: column; gap: var(--sp-5); }
-.case-gallery__row { display: grid; gap: var(--sp-5); }
-.case-gallery__row--full { grid-template-columns: 1fr; }
-.case-gallery__row--half { grid-template-columns: 1fr 1fr; }
-.case-gallery__row--triple { grid-template-columns: 1fr 1fr 1fr; }
-.case-gallery__row--asym { grid-template-columns: 38% 1fr; direction: ltr; }
-.case-gallery__cell { position: relative; overflow: hidden; }
-.case-gallery__cell--lg { border-radius: var(--radius-md); }
-.case-gallery__cell--sm { border-radius: var(--radius-sm); }
-.case-gallery__cell .placeholder { position: absolute; inset: 0; }
-.case-gallery__cell--ratio-16-9 { aspect-ratio: 16 / 9; }
-.case-gallery__cell--ratio-4-3 { aspect-ratio: 4 / 3; }
-.case-gallery__cell--ratio-1-1 { aspect-ratio: 1 / 1; }
-.case-gallery__cell--ratio-2-3 { aspect-ratio: 2 / 3; }
-.case-gallery__cell--ratio-21-9 { aspect-ratio: 21 / 9; }
+.case-gallery__cell {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  aspect-ratio: 16 / 9;
+}
+.case-gallery__cell .placeholder,
+.case-gallery__cell img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .case-gallery__auto-chip { position: absolute; top: var(--sp-3); left: var(--sp-3); z-index: 2; font-size: var(--fs-tiny); font-weight: var(--fw-medium); letter-spacing: 0.05em; color: var(--color-text-secondary); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 999px; padding: 3px var(--sp-2); }
 .case-gallery__dots { position: absolute; bottom: var(--sp-3); left: 50%; transform: translateX(-50%); z-index: 2; display: flex; gap: 6px; }
 .case-gallery__dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--color-text-muted); }
 .case-gallery__dots span:first-child { background: var(--color-text-primary); }
-
-.case-nav-footer { border-top: 1px solid var(--color-border); background: var(--color-bg); }
-.case-nav-footer__inner { max-width: var(--content-max); margin-inline: auto; padding-inline: var(--margin-x); padding-block: var(--sp-5); display: flex; justify-content: space-between; align-items: center; direction: ltr; font-size: var(--fs-small); }
-.case-nav-footer__link { display: inline-flex; align-items: center; gap: var(--sp-2); color: var(--color-text-muted); direction: rtl; cursor: default; }
-.case-nav-footer__counter { color: var(--color-text-secondary); font-size: var(--fs-caption); direction: rtl; }
 
 @media (max-width: 900px) {
   .case-hero { height: auto; min-height: 480px; }
@@ -497,11 +497,8 @@ a { color: inherit; text-decoration: none; }
   .case-hero__media { height: 320px; }
   .case-hero__content { align-items: center; text-align: center; padding: var(--sp-6) var(--sp-5); }
   .case-hero__rule { margin-inline: auto; }
-  .case-hero__scroll-hint { display: none; }
   .case-brief__grid { grid-template-columns: 1fr; gap: var(--sp-6); }
   .case-brief__text { margin-inline: auto; }
-  .case-gallery__row--half, .case-gallery__row--triple, .case-gallery__row--asym { grid-template-columns: 1fr; }
-  .case-nav-footer__inner { flex-wrap: wrap; gap: var(--sp-3); justify-content: center; text-align: center; }
 }
 
 /* =========================================================
