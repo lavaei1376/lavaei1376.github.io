@@ -491,6 +491,80 @@ a { color: inherit; text-decoration: none; }
 .case-gallery__dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--color-text-muted); }
 .case-gallery__dots span:first-child { background: var(--color-text-primary); }
 
+/* --- Gallery slider cell (NEW) — structure only, no interaction yet.
+   One cell per case study can carry this modifier instead of a single
+   static image. Holds ~4 stacked slide placeholders (only the first
+   shown until the refinement phase wires up auto-advance/manual
+   arrows), reusing the existing AUTO chip + dot pattern rather than
+   inventing new visual language. Building the shell now means the
+   later interaction pass only adds JS, no markup rework. */
+.case-gallery__slides { position: absolute; inset: 0; }
+.case-gallery__slide.placeholder { position: absolute; inset: 0; }
+.case-gallery__slide:not(:first-child) { display: none; }
+
+/* --- Attribution / scope caption (NEW) — shared component for any
+   case study needing a one-line ownership or credit note directly
+   under the hero (e.g. TFIT's UI/UX-team caption, Taris/Automotive's
+   collaborative-credit line). Kept deliberately plain — quiet,
+   factual, not a design moment. */
+.case-caption {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-block: var(--sp-4) 0;
+  text-align: right;
+  font-size: var(--fs-small);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-normal);
+}
+
+/* --- Related projects strip (NEW) — closes every case study before
+   the shared footer. Black band matching the case-hero tone, three
+   square cards. Card targets are auto-selected as "next 3 projects in
+   the locked presentation order, wrapping around" — same low-
+   maintenance linking convention as the Project Index. */
+.case-related { background: var(--color-black); padding-block: var(--sp-8); }
+.case-related__header {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-bottom: var(--sp-6);
+  text-align: right;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.03em;
+}
+.case-related__grid {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5);
+}
+.case-related__card {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.case-related__card .placeholder,
+.case-related__card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.case-related__label {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: var(--sp-4);
+  background: linear-gradient(to top, rgba(0,0,0,0.72), transparent);
+  color: var(--color-white);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  text-align: right;
+}
+
 @media (max-width: 900px) {
   .case-hero { height: auto; min-height: 480px; }
   .case-hero__grid { grid-template-columns: 1fr; height: auto; }
@@ -499,6 +573,8 @@ a { color: inherit; text-decoration: none; }
   .case-hero__rule { margin-inline: auto; }
   .case-brief__grid { grid-template-columns: 1fr; gap: var(--sp-6); }
   .case-brief__text { margin-inline: auto; }
+  .case-caption { text-align: center; }
+  .case-related__grid { grid-template-columns: 1fr; }
 }
 
 /* =========================================================
