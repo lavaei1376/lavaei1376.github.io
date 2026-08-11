@@ -565,6 +565,104 @@ a { color: inherit; text-decoration: none; }
   text-align: right;
 }
 
+/* --- Category directory + per-category galleries (NEW) — for case
+   studies large enough to split into distinct sub-sections (TFIT
+   first; Boolooz/Automotive planned once TFIT is approved). Sits
+   between Hero and Brief & Approach so the visitor sees the
+   structure immediately. Not black — black is reserved for Hero and
+   the closing Related strip per the locked palette exception, so
+   this uses the regular surface/border tones instead. */
+.case-categories {
+  background: var(--color-surface);
+  padding-block: var(--sp-7);
+  border-block: 1px solid var(--color-border);
+}
+.case-categories__intro {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-bottom: var(--sp-5);
+  text-align: right;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.03em;
+}
+.case-categories__grid {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+.case-categories__card {
+  display: block;
+  padding: var(--sp-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  text-align: right;
+}
+.case-categories__num {
+  display: block;
+  font-size: var(--fs-caption);
+  color: var(--color-text-muted);
+  font-weight: var(--fw-medium);
+}
+.case-categories__name {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+}
+.case-categories__desc {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-small);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-normal);
+}
+
+/* Per-category section — reuses .case-gallery__grid/.case-gallery__cell
+   verbatim for the actual image cells (no new cell-level CSS needed),
+   only the wrapper/heading are new. Each category is a self-contained
+   .case-category block with its own anchor id for the directory links. */
+.case-category {
+  background: var(--color-bg);
+  padding-block: var(--sp-8);
+  /* Anchor-scroll fix: without this, clicking a directory card lands
+     the section flush at the viewport top, hidden behind the fixed
+     nav (64px). Same root cause likely affects the Home page's
+     #hero/#index/#about anchors too — worth revisiting sitewide in
+     the refinement pass, scoped here for now since this is the
+     feature directly in front of Saeed. */
+  scroll-margin-top: var(--nav-h);
+}
+.case-category + .case-category { border-top: 1px solid var(--color-border); }
+.case-category__header {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-bottom: var(--sp-6);
+  text-align: right;
+}
+.case-category__eyebrow {
+  display: block;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.03em;
+}
+.case-category__name {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+}
+
 @media (max-width: 900px) {
   .case-hero { height: auto; min-height: 480px; }
   .case-hero__grid { grid-template-columns: 1fr; height: auto; }
@@ -575,6 +673,7 @@ a { color: inherit; text-decoration: none; }
   .case-brief__text { margin-inline: auto; }
   .case-caption { text-align: center; }
   .case-related__grid { grid-template-columns: 1fr; }
+  .case-categories__grid { grid-template-columns: 1fr; }
 }
 
 /* =========================================================
