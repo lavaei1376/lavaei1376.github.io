@@ -12,10 +12,11 @@
 
 /* =========================================================
    DESIGN TOKENS — derived from the locked Figma system.
-   NOTE: motion tokens (--ease-out, --dur-*) intentionally
-   removed this phase — no animation/transition anywhere in
-   the site until Saeed reopens that work. Re-add when that
-   phase starts rather than leaving unused dead tokens around.
+   Motion tokens reintroduced this session (refinement pass) —
+   were intentionally stripped during the multi-page pivot while
+   structure/functionality took priority. Re-added now that all
+   9 case studies are structurally complete and Saeed has
+   approved moving into animation/interaction.
    ========================================================= */
 :root {
   /* Color */
@@ -68,16 +69,28 @@
   --radius-md: 12px;  /* large gallery frames */
   --radius-sm: 8px;   /* small gallery cells */
 
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 200ms;
+  --dur-base: 400ms;
+  --dur-slow: 700ms;
+
   /* Layout */
   --nav-h: 64px;
   --content-max: 1440px;
   --margin-x: 80px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; }
+}
+
 /* =========================================================
    RESET
    ========================================================= */
 *, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
   margin: 0;
@@ -141,6 +154,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--color-text-secondary);
   direction: rtl; /* restore correct reading order for the Persian labels */
 }
+.nav__links a { transition: color var(--dur-fast) var(--ease-out); }
 .nav__links a:hover { color: var(--color-text-primary); }
 .nav__lang {
   font-size: var(--fs-caption);
@@ -241,6 +255,7 @@ a { color: inherit; text-decoration: none; }
   font-weight: var(--fw-medium);
   color: var(--color-text-primary);
   margin-top: var(--sp-6);
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 .hero__cta:hover { background: var(--color-text-primary); color: var(--color-white); }
 .hero__cta-arrow { display: inline-flex; }
@@ -259,6 +274,58 @@ a { color: inherit; text-decoration: none; }
   .nav__links { display: none; }
   :root { --margin-x: 24px; }
 }
+
+/* =========================================================
+   SCROLL REVEAL — reintroduced this session. Elements marked
+   [data-reveal] fade/slide up once, the first time they enter
+   the viewport (driven by interactions.js). Repeating groups
+   (category cards, gallery cells, related cards) get a light
+   staggered delay via nth-child below, rather than needing
+   per-item inline delays authored into every HTML file.
+   ========================================================= */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+[data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+
+.case-categories__grid > [data-reveal]:nth-child(1) { transition-delay: 0ms; }
+.case-categories__grid > [data-reveal]:nth-child(2) { transition-delay: 80ms; }
+.case-categories__grid > [data-reveal]:nth-child(3) { transition-delay: 160ms; }
+.case-related__grid > [data-reveal]:nth-child(1) { transition-delay: 0ms; }
+.case-related__grid > [data-reveal]:nth-child(2) { transition-delay: 80ms; }
+.case-related__grid > [data-reveal]:nth-child(3) { transition-delay: 160ms; }
+.case-gallery__grid > [data-reveal]:nth-child(1) { transition-delay: 0ms; }
+.case-gallery__grid > [data-reveal]:nth-child(2) { transition-delay: 50ms; }
+.case-gallery__grid > [data-reveal]:nth-child(3) { transition-delay: 100ms; }
+.case-gallery__grid > [data-reveal]:nth-child(4) { transition-delay: 150ms; }
+.case-gallery__grid > [data-reveal]:nth-child(5) { transition-delay: 200ms; }
+.case-gallery__grid > [data-reveal]:nth-child(6) { transition-delay: 250ms; }
+.case-gallery__grid > [data-reveal]:nth-child(7) { transition-delay: 300ms; }
+.case-gallery__grid > [data-reveal]:nth-child(8) { transition-delay: 350ms; }
+.case-gallery__grid > [data-reveal]:nth-child(9) { transition-delay: 400ms; }
+.case-gallery__grid > [data-reveal]:nth-child(10) { transition-delay: 450ms; }
+
+/* =========================================================
+   HOVER MEDIA ZOOM — subtle scale-up on the image/placeholder
+   fill inside any browsable card. Works identically on live
+   <img> and placeholder divs, so it already looks right and
+   needs no changes once real assets replace placeholders.
+   ========================================================= */
+.index-item__thumb-wrap img, .index-item__thumb-wrap .placeholder,
+.case-gallery__cell img, .case-gallery__cell .placeholder,
+.case-related__card img, .case-related__card .placeholder {
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.index-item:hover .index-item__thumb-wrap img, .index-item:hover .index-item__thumb-wrap .placeholder,
+.case-gallery__cell:hover img, .case-gallery__cell:hover .placeholder,
+.case-related__card:hover img, .case-related__card:hover .placeholder {
+  transform: scale(1.035);
+}
+.index-item__name, .index-item__arrow { transition: color var(--dur-fast) var(--ease-out); }
+.case-categories__card { transition: border-color var(--dur-fast) var(--ease-out); }
+.case-categories__card:hover { border-color: var(--color-text-primary); }
 
 /* =========================================================
    PLACEHOLDER — generic media placeholder (crosshair + label)
@@ -312,7 +379,20 @@ a { color: inherit; text-decoration: none; }
   text-align: right;
 }
 .index-intro__title { font-size: var(--fs-h1); font-weight: var(--fw-bold); margin: 0; }
-.index-intro__desc { margin-top: var(--sp-3); margin-inline-start: auto; max-width: 560px; font-size: var(--fs-body); color: var(--color-text-secondary); }
+.index-intro__desc {
+  margin-top: var(--sp-3);
+  /* BUG FIX (refinement pass): was margin-inline-start: auto, which
+     in this rtl-inherited context pushed the box toward the LEFT
+     edge instead of pinning it flush-right under the title — the
+     exact "auto-margin on the wrong side" trap documented elsewhere
+     on this site (see .case-brief__text). margin-inline-end: auto
+     absorbs space on the physical-left side instead, keeping the
+     box flush right. */
+  margin-inline-end: auto;
+  max-width: 560px;
+  font-size: var(--fs-body);
+  color: var(--color-text-secondary);
+}
 
 .index-grid {
   max-width: var(--content-max);
@@ -488,16 +568,15 @@ a { color: inherit; text-decoration: none; }
 .case-gallery__cell img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .case-gallery__auto-chip { position: absolute; top: var(--sp-3); left: var(--sp-3); z-index: 2; font-size: var(--fs-tiny); font-weight: var(--fw-medium); letter-spacing: 0.05em; color: var(--color-text-secondary); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 999px; padding: 3px var(--sp-2); }
 .case-gallery__dots { position: absolute; bottom: var(--sp-3); left: 50%; transform: translateX(-50%); z-index: 2; display: flex; gap: 6px; }
-.case-gallery__dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--color-text-muted); }
-.case-gallery__dots span:first-child { background: var(--color-text-primary); }
+.case-gallery__dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--color-text-muted); cursor: pointer; transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+.case-gallery__dots span:hover { transform: scale(1.3); }
+.case-gallery__dots span.is-active { background: var(--color-text-primary); }
 
-/* --- Gallery slider cell (NEW) — structure only, no interaction yet.
-   One cell per case study can carry this modifier instead of a single
-   static image. Holds ~4 stacked slide placeholders (only the first
-   shown until the refinement phase wires up auto-advance/manual
-   arrows), reusing the existing AUTO chip + dot pattern rather than
-   inventing new visual language. Building the shell now means the
-   later interaction pass only adds JS, no markup rework. */
+/* --- Gallery slider cell — structure defined in the previous pass,
+   real interaction (auto-advance, pause-on-hover, manual dots) now
+   wired up by interactions.js. It finds every .case-gallery__cell--
+   slider on the page and drives it independently — one shared
+   script for all slider instances sitewide, not per-page JS. */
 .case-gallery__slides { position: absolute; inset: 0; }
 .case-gallery__slide.placeholder { position: absolute; inset: 0; }
 .case-gallery__slide:not(:first-child) { display: none; }
@@ -721,6 +800,7 @@ a { color: inherit; text-decoration: none; }
   font-size: var(--fs-micro);
   color: var(--color-text-secondary);
   letter-spacing: 0.05em;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 .site-footer__social a:hover { color: var(--color-text-primary); }
 .site-footer__signature {
