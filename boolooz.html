@@ -13,11 +13,12 @@
 <div id="site-nav"></div>
 
 <!-- ============ CASE STUDY: بولوز ============
-     Built from the VAMCO template — generic .case-* classes.
-     Gallery: 10 uniform 16:9 cells, one slider-shell cell (position 6).
-     All image areas remain placeholders per the current build
-     phase; related-projects strip auto-links to the next 3
-     projects in the locked presentation order. -->
+     Categorized case study (same pattern as TFIT). Structure: Hero →
+     Category Directory (3 cards) → Brief & Approach (overview) →
+     3x .case-category sections (Black Friday / Spring Campaign /
+     Main Banners), each with its own 5-cell gallery (cell 4 = slider
+     shell, 5 slides) → Related Projects → shared footer. All image
+     areas remain placeholders. -->
 <section class="case-study" id="boolooz">
 
   <div class="case-hero">
@@ -40,6 +41,29 @@
     </div>
   </div>
 
+  <div class="case-categories">
+    <div class="case-categories__intro">این پروژه به ۳ بخش تقسیم شده است</div>
+    <div class="case-categories__grid">
+
+      <a href="#cat-blackfriday" class="case-categories__card">
+        <span class="case-categories__num">۰۱</span>
+        <span class="case-categories__name">کمپین بلک فرایدی</span>
+        <span class="case-categories__desc">بنرهای متحرک و کمپین دیجیتال بلک فرایدی بولوز.</span>
+      </a>
+      <a href="#cat-spring" class="case-categories__card">
+        <span class="case-categories__num">۰۲</span>
+        <span class="case-categories__name">کمپین بهاره</span>
+        <span class="case-categories__desc">کمپین بهاره بولوز (آبان تا اسفند ۱۴۰۳) — با رشد نزدیک به ۶ برابری سفارش‌ها و ثبت‌نام‌ها.</span>
+      </a>
+      <a href="#cat-mainbanners" class="case-categories__card">
+        <span class="case-categories__num">۰۳</span>
+        <span class="case-categories__name">بنرهای اصلی</span>
+        <span class="case-categories__desc">بنرها و هویت بصری سایت بولوز خارج از بازه‌های کمپینی.</span>
+      </a>
+
+    </div>
+  </div>
+
   <div class="case-brief">
     <div class="case-brief__grid">
       <div class="case-brief__col">
@@ -59,8 +83,11 @@
     </div>
   </div>
 
-  <div class="case-gallery">
-    <div class="case-gallery__header">گالری آثار</div>
+  <div class="case-category" id="cat-blackfriday">
+    <div class="case-category__header">
+      <span class="case-category__eyebrow">بخش ۰۱ از ۰۳</span>
+      <span class="case-category__name">کمپین بلک فرایدی</span>
+    </div>
     <div class="case-gallery__grid">
 
       <div class="case-gallery__cell placeholder">
@@ -75,39 +102,96 @@
         <span class="placeholder__label">۱۶ : ۹ — تصویر 3</span>
       </div>
 
-      <div class="case-gallery__cell placeholder">
-        <span class="placeholder__label">۱۶ : ۹ — تصویر 4</span>
+      <div class="case-gallery__cell case-gallery__cell--slider">
+        <div class="case-gallery__slides">
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۱ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۲ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۳ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۴ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۵ / ۵</span></div>
+        </div>
+        <span class="case-gallery__auto-chip">AUTO</span>
+        <span class="case-gallery__dots"><span></span><span></span><span></span><span></span><span></span></span>
       </div>
 
       <div class="case-gallery__cell placeholder">
         <span class="placeholder__label">۱۶ : ۹ — تصویر 5</span>
       </div>
 
+    </div>
+  </div>
+
+  <div class="case-category" id="cat-spring">
+    <div class="case-category__header">
+      <span class="case-category__eyebrow">بخش ۰۲ از ۰۳</span>
+      <span class="case-category__name">کمپین بهاره</span>
+    </div>
+    <div class="case-gallery__grid">
+
+      <div class="case-gallery__cell placeholder">
+        <span class="placeholder__label">۱۶ : ۹ — تصویر 1</span>
+      </div>
+
+      <div class="case-gallery__cell placeholder">
+        <span class="placeholder__label">۱۶ : ۹ — تصویر 2</span>
+      </div>
+
+      <div class="case-gallery__cell placeholder">
+        <span class="placeholder__label">۱۶ : ۹ — تصویر 3</span>
+      </div>
+
       <div class="case-gallery__cell case-gallery__cell--slider">
         <div class="case-gallery__slides">
-          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۱ / ۴</span></div>
-          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۲ / ۴</span></div>
-          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۳ / ۴</span></div>
-          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۴ / ۴</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۱ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۲ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۳ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۴ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۵ / ۵</span></div>
         </div>
         <span class="case-gallery__auto-chip">AUTO</span>
-        <span class="case-gallery__dots"><span></span><span></span><span></span><span></span></span>
+        <span class="case-gallery__dots"><span></span><span></span><span></span><span></span><span></span></span>
       </div>
 
       <div class="case-gallery__cell placeholder">
-        <span class="placeholder__label">۱۶ : ۹ — تصویر 7</span>
+        <span class="placeholder__label">۱۶ : ۹ — تصویر 5</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="case-category" id="cat-mainbanners">
+    <div class="case-category__header">
+      <span class="case-category__eyebrow">بخش ۰۳ از ۰۳</span>
+      <span class="case-category__name">بنرهای اصلی</span>
+    </div>
+    <div class="case-gallery__grid">
+
+      <div class="case-gallery__cell placeholder">
+        <span class="placeholder__label">۱۶ : ۹ — تصویر 1</span>
       </div>
 
       <div class="case-gallery__cell placeholder">
-        <span class="placeholder__label">۱۶ : ۹ — تصویر 8</span>
+        <span class="placeholder__label">۱۶ : ۹ — تصویر 2</span>
       </div>
 
       <div class="case-gallery__cell placeholder">
-        <span class="placeholder__label">۱۶ : ۹ — تصویر 9</span>
+        <span class="placeholder__label">۱۶ : ۹ — تصویر 3</span>
+      </div>
+
+      <div class="case-gallery__cell case-gallery__cell--slider">
+        <div class="case-gallery__slides">
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۱ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۲ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۳ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۴ / ۵</span></div>
+          <div class="case-gallery__slide placeholder"><span class="placeholder__label">اسلایدر ۵ / ۵</span></div>
+        </div>
+        <span class="case-gallery__auto-chip">AUTO</span>
+        <span class="case-gallery__dots"><span></span><span></span><span></span><span></span><span></span></span>
       </div>
 
       <div class="case-gallery__cell placeholder">
-        <span class="placeholder__label">۱۶ : ۹ — تصویر 10</span>
+        <span class="placeholder__label">۱۶ : ۹ — تصویر 5</span>
       </div>
 
     </div>
