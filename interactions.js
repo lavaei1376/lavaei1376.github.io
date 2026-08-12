@@ -13,6 +13,36 @@
 (function () {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // --- Hero stat count-up (animation depth pass) ---
+  // Triggered from inside the reveal observer below, the moment
+  // .hero__stats becomes visible — no separate observer needed.
+  // Skipped entirely under prefers-reduced-motion: the authored
+  // Persian digits already sit in the markup as the correct final
+  // value, so doing nothing is the correct reduced-motion behavior.
+  const PERSIAN_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  function toPersianDigits(n) {
+    return String(n)
+      .split('')
+      .map((d) => PERSIAN_DIGITS[+d] ?? d)
+      .join('');
+  }
+  function animateCount(el) {
+    const target = parseInt(el.getAttribute('data-count-to'), 10);
+    if (isNaN(target)) return;
+    const duration = 900; // slightly longer than --dur-slow (700ms) — this is a
+                           // standalone micro-interaction, not a shared transition,
+                           // so it isn't wired to the CSS var, but stays in the
+                           // same "medium pace" family per Saeed's instruction.
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // cubic ease-out
+      el.textContent = toPersianDigits(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
   // --- Scroll reveal ---
   const revealEls = document.querySelectorAll('[data-reveal]');
   if (prefersReduced) {
@@ -23,6 +53,7 @@
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
+            entry.target.querySelectorAll('.hero__stat-num[data-count-to]').forEach(animateCount);
             observer.unobserve(entry.target);
           }
         });

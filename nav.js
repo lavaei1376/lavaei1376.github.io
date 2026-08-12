@@ -34,4 +34,53 @@
   } else {
     document.body.prepend(nav);
   }
+
+  /* =======================================================
+     ANIMATION DEPTH PASS — two additions:
+     1. Scroll-awareness: .is-scrolled toggled once the page
+        moves off the very top, driving the shadow in styles.css.
+        Runs on every page (nav is shared).
+     2. Active-link scroll-spy: Home page only — tracks which of
+        #hero/#index/#about is currently in view and marks the
+        matching nav link .is-active. Case-study pages don't have
+        these sections in-page (they link back to index.html), so
+        scroll-spy is skipped there; hover-underline still works
+        everywhere via CSS alone.
+     ======================================================= */
+  function updateScrollState() {
+    nav.classList.toggle('is-scrolled', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', updateScrollState, { passive: true });
+  updateScrollState();
+
+  if (isHome && 'IntersectionObserver' in window) {
+    const sectionIds = ['hero', 'index', 'about'];
+    const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const links = nav.querySelectorAll('.nav__links a');
+
+    function setActive(id) {
+      links.forEach((a) => {
+        a.classList.toggle('is-active', a.getAttribute('href') === '#' + id);
+      });
+    }
+
+    const spy = new IntersectionObserver(
+      (entries) => {
+        // Prefer the intersecting section nearest the top of the
+        // viewport — correct behavior when two sections are both
+        // partially visible during a fast scroll.
+        let best = null;
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!best || entry.boundingClientRect.top < best.boundingClientRect.top) {
+              best = entry;
+            }
+          }
+        });
+        if (best) setActive(best.target.id);
+      },
+      { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
+    );
+    sections.forEach((s) => spy.observe(s));
+  }
 })();

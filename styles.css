@@ -129,6 +129,16 @@ a { color: inherit; text-decoration: none; }
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   z-index: 100;
+  /* Scroll-awareness (animation depth pass): border-bottom stays
+     constant at all times — it already provides resting-state
+     separation on every page, including case-study pages with a
+     black hero directly beneath the nav — only a soft drop shadow
+     is added once scrolled, toggled via .is-scrolled in nav.js.
+     Contrast never changes, just depth. */
+  transition: box-shadow var(--dur-base) var(--ease-out);
+}
+.nav.is-scrolled {
+  box-shadow: 0 12px 24px -16px rgba(17, 17, 17, 0.18);
 }
 .nav__inner {
   max-width: var(--content-max);
@@ -154,8 +164,33 @@ a { color: inherit; text-decoration: none; }
   color: var(--color-text-secondary);
   direction: rtl; /* restore correct reading order for the Persian labels */
 }
-.nav__links a { transition: color var(--dur-fast) var(--ease-out); }
+.nav__links a {
+  position: relative;
+  transition: color var(--dur-fast) var(--ease-out);
+}
 .nav__links a:hover { color: var(--color-text-primary); }
+/* Active-section indicator (animation depth pass) — underline, driven
+   by scroll-spy in nav.js on the Home page only. Also appears on
+   hover everywhere (including case-study pages, where it's just a
+   hover cue since there's no section to spy on) for one consistent
+   underline language. */
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: -8px;
+  height: 2px;
+  background: var(--color-text-primary);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.nav__links a:hover::after,
+.nav__links a.is-active::after {
+  transform: scaleX(1);
+}
+.nav__links a.is-active { color: var(--color-text-primary); }
 .nav__lang {
   font-size: var(--fs-caption);
   font-weight: var(--fw-medium);
@@ -324,8 +359,30 @@ a { color: inherit; text-decoration: none; }
   transform: scale(1.035);
 }
 .index-item__name, .index-item__arrow { transition: color var(--dur-fast) var(--ease-out); }
-.case-categories__card { transition: border-color var(--dur-fast) var(--ease-out); }
-.case-categories__card:hover { border-color: var(--color-text-primary); }
+.case-categories__card {
+  transition: border-color var(--dur-fast) var(--ease-out),
+              transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
+}
+.case-categories__card:hover {
+  border-color: var(--color-text-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -14px rgba(17, 17, 17, 0.16);
+}
+
+/* Gallery cells (animation depth pass) — soft lift + shadow, layered
+   with the existing image-zoom above. Applies identically to flat
+   .case-gallery grids and per-category grids (same class, reused),
+   including slider cells — the lift pairs naturally with the
+   existing pause-on-hover behavior. */
+.case-gallery__cell {
+  transition: transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
+}
+.case-gallery__cell:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -18px rgba(17, 17, 17, 0.2);
+}
 
 /* =========================================================
    PLACEHOLDER — generic media placeholder (crosshair + label)
@@ -642,6 +699,17 @@ a { color: inherit; text-decoration: none; }
   font-size: var(--fs-body);
   font-weight: var(--fw-medium);
   text-align: right;
+  /* Animation depth pass: label sits slightly lower at rest, slides
+     up into place on hover — ties the reveal motion to hover intent
+     instead of being permanently static, pairing with the existing
+     image-zoom on the same card. Stays fully readable at rest (the
+     gradient scrim is unchanged) — this is a position shift, not a
+     visibility toggle. */
+  transform: translateY(8px);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.case-related__card:hover .case-related__label {
+  transform: translateY(0);
 }
 
 /* --- Category directory + per-category galleries (NEW) — for case
