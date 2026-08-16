@@ -152,8 +152,25 @@ a { color: inherit; text-decoration: none; }
      otherwise reverse DOM order and swap these. Text inside stays RTL. */
   direction: ltr;
 }
-.nav__logo { display: flex; align-items: center; color: var(--color-text-primary); }
+.nav__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: var(--color-text-primary);
+  /* Defensive: keeps the logo pinned right even when .nav__links is
+     hidden on mobile (space-between with a single remaining flex
+     item would otherwise collapse it to the left edge). Harmless
+     on desktop where space-between already puts it there. */
+  margin-inline-start: auto;
+}
 .nav__logo svg { height: 28px; width: auto; }
+.nav__logo-name {
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
 .nav__links {
   display: flex;
   gap: var(--sp-5);
@@ -191,13 +208,6 @@ a { color: inherit; text-decoration: none; }
   transform: scaleX(1);
 }
 .nav__links a.is-active { color: var(--color-text-primary); }
-.nav__lang {
-  font-size: var(--fs-caption);
-  font-weight: var(--fw-medium);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.05em;
-  direction: ltr;
-}
 
 /* =========================================================
    SECTION DIVIDER — breathing room between major sections.
