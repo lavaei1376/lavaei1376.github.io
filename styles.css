@@ -220,9 +220,11 @@ a { color: inherit; text-decoration: none; }
   position: relative;
 }
 .section-divider--tight { height: var(--sp-10-tight); }
-.section-divider--accent {
-  background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-border) 100%);
-}
+/* --accent previously washed from --color-bg to --color-border via a
+   linear-gradient, creating a visible shadow band at the Hero→Index
+   and Index→About boundaries. Removed per Saeed — page background
+   now stays fully uniform (--color-bg) across Hero/Index/About; only
+   the thin 1px hairline below marks the boundary. */
 .section-divider--accent::before {
   content: "";
   position: absolute;
@@ -843,7 +845,7 @@ a { color: inherit; text-decoration: none; }
    ========================================================= */
 .site-footer {
   border-top: 1px solid var(--color-border);
-  background: var(--color-bg);
+  background: var(--color-surface);
   position: relative;
   height: 208px;
 }
