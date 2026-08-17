@@ -869,7 +869,10 @@ a { color: inherit; text-decoration: none; }
 .site-footer__social {
   position: absolute;
   bottom: 44px;
-  right: var(--margin-x);
+  /* Left (was right pre-redesign) — matches the nav's logo-on-the-right
+     convention, kept from the redesign since it's a real consistency
+     fix, not part of what Saeed asked to revert. */
+  left: var(--margin-x);
   display: flex;
   gap: var(--sp-4);
   direction: rtl;
@@ -884,7 +887,8 @@ a { color: inherit; text-decoration: none; }
 .site-footer__signature {
   position: absolute;
   bottom: 44px;
-  left: var(--margin-x);
+  /* Right (was left pre-redesign) — see note above. */
+  right: var(--margin-x);
   display: flex;
   align-items: center;
   gap: var(--sp-3);
