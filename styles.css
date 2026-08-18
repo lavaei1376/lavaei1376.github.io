@@ -526,6 +526,128 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* =========================================================
+   FAQ / "GET TO KNOW ME" ACCORDION — new section, added between
+   Project Index and About & Contact per Saeed's reference video
+   (a black-background FAQ accordion seen on another portfolio
+   site). Structure/behavior matched as closely as possible:
+   single rounded container holding N stacked rows (not separate
+   cards), hairline dividers between rows, single-item-open
+   accordion, +/× icon rotation, smooth grid-based height
+   animation (no JS height measurement). Black background — same
+   intentional palette exception as case-study heroes and the
+   Related-projects strip, so no section-divider hairline is
+   needed before/after this section; the color shift itself marks
+   the boundary (same convention used at Hero→case-hero and
+   case-related→footer elsewhere in the codebase).
+   Content is placeholder — draft questions written for Saeed's
+   review at the content-writing stage, not final copy.
+   ========================================================= */
+.faq { background: var(--color-black); padding-block: var(--sp-10); }
+.faq__intro {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+  padding-bottom: var(--sp-7);
+  text-align: right;
+}
+.faq__intro .hero__eyebrow { color: rgba(255,255,255,0.55); }
+.faq__intro .hero__deco-line { background: rgba(255,255,255,0.18); margin-inline: 0 auto; }
+.faq__title {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  color: var(--color-white);
+}
+
+.faq__list {
+  max-width: 860px;
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
+}
+.faq__item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.faq__item:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.faq__item:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.faq__item + .faq__item { border-top: none; }
+
+.faq__question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  padding: var(--sp-5) var(--sp-6);
+  background: none;
+  border: none;
+  text-align: right;
+  font-family: inherit;
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+  color: var(--color-white);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.faq__item:hover .faq__question { background: rgba(255,255,255,0.02); }
+
+.faq__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.22);
+  transition: transform var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+}
+.faq__icon::before, .faq__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  background: rgba(255,255,255,0.85);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.faq__icon::before { width: 12px; height: 1px; transform: translate(-50%, -50%); }
+.faq__icon::after { width: 1px; height: 12px; transform: translate(-50%, -50%); }
+.faq__item.is-open .faq__icon { transform: rotate(45deg); border-color: rgba(255,255,255,0.4); }
+
+/* Smooth height animation via CSS grid — 0fr → 1fr on the wrapper,
+   with a single overflow:hidden child. Avoids JS scrollHeight
+   measurement (fragile if answer copy changes length later). */
+.faq__answer-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-slow) var(--ease-out);
+}
+.faq__answer-inner { overflow: hidden; }
+.faq__answer {
+  margin: 0;
+  padding: 0 var(--sp-6) var(--sp-5);
+  max-width: 640px;
+  margin-inline-start: auto;
+  font-size: var(--fs-body);
+  line-height: var(--lh-loose);
+  color: rgba(255,255,255,0.55);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.faq__item.is-open .faq__answer-wrap { grid-template-rows: 1fr; }
+.faq__item.is-open .faq__answer { opacity: 1; transition: opacity var(--dur-base) var(--ease-out) var(--dur-fast); }
+
+.faq__list > [data-reveal]:nth-child(1) { transition-delay: 0ms; }
+.faq__list > [data-reveal]:nth-child(2) { transition-delay: 60ms; }
+.faq__list > [data-reveal]:nth-child(3) { transition-delay: 120ms; }
+.faq__list > [data-reveal]:nth-child(4) { transition-delay: 180ms; }
+.faq__list > [data-reveal]:nth-child(5) { transition-delay: 240ms; }
+
+@media (max-width: 900px) {
+  .faq { padding-block: var(--sp-8); }
+  .faq__intro, .faq__list { padding-inline: var(--sp-5); }
+  .faq__title { font-size: 2.25rem; }
+  .faq__question { padding: var(--sp-4) var(--sp-4); font-size: var(--fs-body); }
+  .faq__answer { padding-inline: var(--sp-4); }
+}
+
+/* =========================================================
    ABOUT & CONTACT — Stage 2 recompose per the new Figma
    export. No longer a full-height 65/35 split with the photo
    stretching the whole section — content now reads as a

@@ -6,9 +6,6 @@
 <title>سعید لواعی — طراح گرافیک ارشد</title>
 <meta name="description" content="پورتفولیوی سعید لواعی، طراح گرافیک ارشد — هویت بصری، چاپ و طراحی دیجیتال">
 <link rel="stylesheet" href="styles.css">
-<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-<link rel="alternate icon" href="assets/img/favicon.ico">
-<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 </head>
 <body data-page="home">
 
@@ -66,9 +63,90 @@
 
 <!-- Case studies 2–9 will get their own dedicated pages as they're
      built (VAMCO is done — see vamco.html). Home page stays
-     Hero → Project Index → About & Contact only. -->
+     Hero → Project Index → FAQ → About & Contact. -->
 
-<div class="section-divider section-divider--tight section-divider--accent"></div>
+<!-- ============ FAQ / "GET TO KNOW ME" ============
+     New section, added per Saeed's reference (a black FAQ
+     accordion seen on another portfolio). Black background —
+     same intentional palette exception as case-study heroes —
+     so no section-divider hairline before/after; the color
+     shift itself marks the boundary. Single-item-open accordion,
+     behavior driven by interactions.js (.faq__list). Questions
+     and answers below are DRAFT placeholder copy for Saeed's
+     review at the content-writing stage — not final. -->
+<section class="faq" id="faq">
+
+  <div class="faq__intro">
+    <p class="hero__eyebrow" data-reveal>سوالات متداول</p>
+    <div class="hero__deco-line" data-reveal></div>
+    <h2 class="faq__title" data-reveal>بیشتر با من آشنا شوید</h2>
+  </div>
+
+  <div class="faq__list">
+
+    <div class="faq__item" data-reveal>
+      <button class="faq__question" type="button" aria-expanded="false">
+        <span>سعید کیست؟</span>
+        <span class="faq__icon" aria-hidden="true"></span>
+      </button>
+      <div class="faq__answer-wrap">
+        <div class="faq__answer-inner">
+          <p class="faq__answer">[ متن نمونه پاسخ — ۲ تا ۳ خط. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item" data-reveal>
+      <button class="faq__question" type="button" aria-expanded="false">
+        <span>چرا به‌جای همکاری با آژانس، با سعید به‌صورت مستقل کار کنم؟</span>
+        <span class="faq__icon" aria-hidden="true"></span>
+      </button>
+      <div class="faq__answer-wrap">
+        <div class="faq__answer-inner">
+          <p class="faq__answer">[ متن نمونه پاسخ — ۲ تا ۳ خط. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item" data-reveal>
+      <button class="faq__question" type="button" aria-expanded="false">
+        <span>سعید در چه حوزه‌هایی تخصص دارد؟</span>
+        <span class="faq__icon" aria-hidden="true"></span>
+      </button>
+      <div class="faq__answer-wrap">
+        <div class="faq__answer-inner">
+          <p class="faq__answer">[ متن نمونه پاسخ — ۲ تا ۳ خط. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item" data-reveal>
+      <button class="faq__question" type="button" aria-expanded="false">
+        <span>سعید با چه برندها و شرکت‌هایی همکاری کرده؟</span>
+        <span class="faq__icon" aria-hidden="true"></span>
+      </button>
+      <div class="faq__answer-wrap">
+        <div class="faq__answer-inner">
+          <p class="faq__answer">[ متن نمونه پاسخ — ۲ تا ۳ خط. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item" data-reveal>
+      <button class="faq__question" type="button" aria-expanded="false">
+        <span>شیوه همکاری (پروژه‌ای یا تمام‌وقت) به چه صورت است؟</span>
+        <span class="faq__icon" aria-hidden="true"></span>
+      </button>
+      <div class="faq__answer-wrap">
+        <div class="faq__answer-inner">
+          <p class="faq__answer">[ متن نمونه پاسخ — ۲ تا ۳ خط. متن نهایی در مرحله تدوین محتوا نوشته می‌شود ]</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
 
 <!-- ============ ABOUT & CONTACT ============
      Legacy proportions — Stage 2 adjusts sizing per the new

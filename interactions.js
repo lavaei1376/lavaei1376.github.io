@@ -66,6 +66,27 @@
     revealEls.forEach((el) => el.classList.add('is-visible'));
   }
 
+  // --- FAQ accordion (single-item-open) ---
+  document.querySelectorAll('.faq__list').forEach((list) => {
+    const items = list.querySelectorAll('.faq__item');
+    items.forEach((item) => {
+      const btn = item.querySelector('.faq__question');
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const isOpen = item.classList.contains('is-open');
+        items.forEach((i) => {
+          i.classList.remove('is-open');
+          const b = i.querySelector('.faq__question');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  });
+
   // --- Gallery sliders ---
   document.querySelectorAll('.case-gallery__cell--slider').forEach((cell) => {
     const slides = cell.querySelectorAll('.case-gallery__slide');
