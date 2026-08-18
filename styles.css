@@ -64,10 +64,19 @@
   --sp-10: 140px;   /* default breathing room between major sections */
   --sp-10-tight: 96px; /* reduced variant, e.g. list-style sections */
 
-  /* Radius */
-  --radius-lg: 16px;  /* hero/portrait placeholders */
-  --radius-md: 12px;  /* large gallery frames */
-  --radius-sm: 8px;   /* small gallery cells */
+  /* Radius — set to 0 sitewide per Saeed's direction (square edges
+     everywhere, especially image/media containers). Tokens kept
+     (rather than deleted) so every consumer — hero panel, index
+     thumbnails, about photo, gallery cells, related/category cards,
+     FAQ container — still reads from one source of truth if this
+     ever needs to change again. Fully circular/pill elements (CTA
+     buttons, slider dots, FAQ icon, AUTO chip) are NOT driven by
+     these tokens — they use explicit 999px/50% values, a different
+     UI idiom (buttons/indicators, not card corners), and are
+     intentionally left untouched. */
+  --radius-lg: 0px;
+  --radius-md: 0px;
+  --radius-sm: 0px;
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
