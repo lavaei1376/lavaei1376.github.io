@@ -95,6 +95,7 @@
 
     let current = 0;
     let timer = null;
+    let isHovering = false;
 
     function show(i) {
       current = (i + slides.length) % slides.length;
@@ -119,12 +120,18 @@
     dots.forEach((d, idx) => {
       d.addEventListener('click', () => {
         show(idx);
-        start(); // restart the auto-advance clock after a manual pick
+        // Only restart the clock if the mouse isn't currently over the
+        // cell — a dot is nested inside the cell, so clicking one always
+        // means mouseenter already fired and paused it. Restarting here
+        // unconditionally silently broke pause-on-hover the moment any
+        // dot was clicked, on every slider sitewide. mouseleave already
+        // restarts it once the mouse actually leaves.
+        if (!isHovering) start();
       });
     });
 
-    cell.addEventListener('mouseenter', stop);
-    cell.addEventListener('mouseleave', start);
+    cell.addEventListener('mouseenter', () => { isHovering = true; stop(); });
+    cell.addEventListener('mouseleave', () => { isHovering = false; start(); });
 
     show(0);
     start();
