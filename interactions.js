@@ -89,6 +89,7 @@
 
   // --- Gallery sliders ---
   document.querySelectorAll('.case-gallery__cell--slider').forEach((cell) => {
+    const slidesWrap = cell.querySelector('.case-gallery__slides');
     const slides = cell.querySelectorAll('.case-gallery__slide');
     const dots = cell.querySelectorAll('.case-gallery__dots span');
     if (!slides.length) return;
@@ -104,6 +105,8 @@
       });
       dots.forEach((d, idx) => d.classList.toggle('is-active', idx === current));
     }
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
 
     function start() {
       if (prefersReduced) return;
@@ -132,6 +135,68 @@
 
     cell.addEventListener('mouseenter', () => { isHovering = true; stop(); });
     cell.addEventListener('mouseleave', () => { isHovering = false; start(); });
+
+    // --- Arrow controls (injected here, once, for every slider sitewide —
+    // no HTML changes needed on any of the 9 case-study pages) ---
+    const arrowSvg = (dir) => `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="${dir === 'prev' ? 'M9 6l6 6-6 6' : 'M15 6l-6 6 6 6'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+    const prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.className = 'case-gallery__arrow case-gallery__arrow--prev';
+    prevBtn.setAttribute('aria-label', 'تصویر قبلی');
+    prevBtn.innerHTML = arrowSvg('prev');
+
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'case-gallery__arrow case-gallery__arrow--next';
+    nextBtn.setAttribute('aria-label', 'تصویر بعدی');
+    nextBtn.innerHTML = arrowSvg('next');
+
+    cell.appendChild(prevBtn);
+    cell.appendChild(nextBtn);
+
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prev();
+      if (!isHovering) start();
+    });
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      next();
+      if (!isHovering) start();
+    });
+
+    // --- Drag / swipe (Pointer Events — unifies mouse and touch) ---
+    let dragStartX = null;
+    let dragging = false;
+    const DRAG_THRESHOLD = 40; // px — must be a deliberate swipe, not a stray click-drag
+
+    slidesWrap.addEventListener('pointerdown', (e) => {
+      dragStartX = e.clientX;
+      dragging = true;
+      slidesWrap.setPointerCapture(e.pointerId);
+      slidesWrap.classList.add('is-dragging');
+      stop();
+    });
+
+    slidesWrap.addEventListener('pointerup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      slidesWrap.classList.remove('is-dragging');
+      const delta = e.clientX - dragStartX;
+      if (Math.abs(delta) > DRAG_THRESHOLD) {
+        // Dragging left = advance to next slide, dragging right = go back —
+        // matches natural swipe direction regardless of page RTL/LTR.
+        if (delta < 0) next(); else prev();
+      }
+      if (!isHovering) start();
+    });
+
+    slidesWrap.addEventListener('pointercancel', () => {
+      dragging = false;
+      slidesWrap.classList.remove('is-dragging');
+      if (!isHovering) start();
+    });
 
     show(0);
     start();

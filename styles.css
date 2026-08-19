@@ -785,6 +785,39 @@ a { color: inherit; text-decoration: none; }
 .case-gallery__dots span:hover { transform: scale(1.3); }
 .case-gallery__dots span.is-active { background: var(--color-text-primary); }
 
+/* --- Slider arrow controls (animation depth + interaction pass) ---
+   Circular buttons, left/right edges, vertically centered. Reuses the
+   same surface/border language as the AUTO chip so it reads as part of
+   the same UI family rather than a new visual idiom. */
+.case-gallery__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 0.88;
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.case-gallery__arrow:hover { opacity: 1; background: var(--color-text-primary); color: var(--color-white); transform: translateY(-50%) scale(1.06); }
+.case-gallery__arrow svg { width: 18px; height: 18px; }
+.case-gallery__arrow--prev { right: var(--sp-3); }
+.case-gallery__arrow--next { left: var(--sp-3); }
+
+/* --- Drag / swipe cursor affordance --- */
+.case-gallery__slides { cursor: grab; touch-action: pan-y; }
+.case-gallery__slides.is-dragging { cursor: grabbing; }
+.case-gallery__slide img { -webkit-user-drag: none; user-select: none; }
+
+
 /* --- Gallery slider cell — structure defined in the previous pass,
    real interaction (auto-advance, pause-on-hover, manual dots) now
    wired up by interactions.js. It finds every .case-gallery__cell--
