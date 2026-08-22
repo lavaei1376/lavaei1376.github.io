@@ -267,6 +267,9 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 .hero__grid {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--margin-x);
   display: grid;
   grid-template-columns: 48% 1fr;
   column-gap: var(--sp-8);
@@ -277,7 +280,6 @@ a { color: inherit; text-decoration: none; }
 .hero__illu-col {
   position: relative;
   height: calc(100% - var(--sp-8) * 2);
-  margin-inline-start: var(--margin-x);
   border-radius: var(--radius-lg);
   background: var(--color-black);
   overflow: hidden;
@@ -289,7 +291,6 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
   align-items: flex-start;
   padding-inline-end: var(--margin-x);
-  padding-inline-start: max(var(--sp-8), calc((100vw - var(--content-max)) / 2 + var(--margin-x)));
   text-align: right;
   direction: rtl;
 }
@@ -323,7 +324,7 @@ a { color: inherit; text-decoration: none; }
 
 @media (max-width: 900px) {
   .hero { height: auto; }
-  .hero__grid { grid-template-columns: 1fr; height: auto; padding-block: var(--sp-6); }
+  .hero__grid { grid-template-columns: 1fr; height: auto; padding-inline: 0; padding-block: var(--sp-6); }
   .hero__illu-col { height: 320px; margin: 0 var(--sp-5); }
   .hero__content-col { text-align: center; align-items: center; padding: var(--sp-7) var(--sp-5) 0; }
   .hero__deco-line, .hero__bio, .hero__rule, .hero__stats { margin-inline: auto; }
