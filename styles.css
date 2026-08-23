@@ -218,6 +218,61 @@ a { color: inherit; text-decoration: none; }
 }
 .nav__links a.is-active { color: var(--color-text-primary); }
 
+/* --- Mobile nav: hamburger toggle + dropdown panel (NEW) ---
+   .nav__links is hidden below 900px (see mobile block further down);
+   this button takes its place in the same physical slot. Panel drops
+   from directly under the fixed nav, sharing the same surface/border
+   language as the nav bar itself so it reads as one continuous piece
+   of chrome rather than a separate floating element. */
+.nav__toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.nav__toggle-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-text-primary);
+  transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+}
+.nav.is-menu-open .nav__toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav.is-menu-open .nav__toggle-bar:nth-child(2) { opacity: 0; }
+.nav.is-menu-open .nav__toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.nav__mobile-menu {
+  position: fixed;
+  top: var(--nav-h);
+  inset-inline: 0;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--dur-base) var(--ease-out);
+  z-index: 99;
+}
+.nav.is-menu-open .nav__mobile-menu { max-height: 260px; }
+.nav__mobile-links { list-style: none; margin: 0; padding: 0 var(--sp-5); direction: rtl; }
+.nav__mobile-links li { border-bottom: 1px solid var(--color-border); }
+.nav__mobile-links li:last-child { border-bottom: none; }
+.nav__mobile-links a {
+  display: block;
+  padding: var(--sp-4) var(--sp-1);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+  text-align: right;
+}
+.nav__mobile-links a.is-active { color: var(--color-text-secondary); }
+
 /* =========================================================
    SECTION DIVIDER — breathing room between major sections.
    Ghost-number wayfinding variant removed (was unused, tied
@@ -332,6 +387,7 @@ a { color: inherit; text-decoration: none; }
   .hero__content-col { text-align: center; align-items: center; padding: var(--sp-7) var(--sp-5) 0; }
   .hero__greeting, .hero__welcome, .hero__deco-line, .hero__bio, .hero__rule, .hero__stats { margin-inline: auto; }
   .nav__links { display: none; }
+  .nav__toggle { display: flex; }
   :root { --margin-x: 24px; }
 }
 
@@ -541,7 +597,24 @@ a { color: inherit; text-decoration: none; }
   .index-intro__title { font-size: 2.25rem; }
   .index-row { grid-template-columns: 1fr; gap: var(--sp-6); padding-block: var(--sp-6); }
   .index-row--single .index-item { grid-column: 1; }
-  .index-item__cats { display: none; } /* full mobile pass reintroduces this — Stage 7 */
+  /* Categories reintroduced (full mobile pass) — desktop's single-row
+     flex (name / cats / arrow, space-between) is too cramped at this
+     width, so name+arrow keep their row and categories wrap onto a
+     second line below, spanning full width regardless of DOM order. */
+  .index-item__meta {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "name arrow" "cats cats";
+    row-gap: var(--sp-2);
+  }
+  .index-item__name-block { grid-area: name; }
+  .index-item__arrow { grid-area: arrow; }
+  .index-item__cats {
+    grid-area: cats;
+    display: block;
+    text-align: right;
+    justify-content: normal;
+  }
 }
 
 /* =========================================================
@@ -811,7 +884,11 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 900px) {
   .case-gallery__row--pair,
   .case-gallery__row--asym { grid-template-columns: 1fr; }
-  .case-gallery__cell--banner { aspect-ratio: 16 / 9; }
+  /* Banner cells keep their native 4:1 ratio on mobile too — these
+     GIF exports have text and logo elements near the left/right
+     edges (see Boolooz Black Friday), so cropping to 16:9 here was
+     cutting real content off both sides. Full-width-but-short reads
+     better than cropped. */
 }
 
 .case-gallery__auto-chip { position: absolute; top: var(--sp-3); left: var(--sp-3); z-index: 2; font-size: var(--fs-tiny); font-weight: var(--fw-medium); letter-spacing: 0.05em; color: var(--color-text-secondary); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 999px; padding: 3px var(--sp-2); }
@@ -1046,6 +1123,31 @@ a { color: inherit; text-decoration: none; }
   .case-caption { text-align: center; }
   .case-related__grid { grid-template-columns: 1fr; }
   .case-categories__grid { grid-template-columns: 1fr; }
+  /* Touch targets: 36px arrows and 5px dots are fine for a mouse
+     cursor but too small to tap reliably. Arrows grow to the 44px
+     floor; dots keep their visual size but gain generous invisible
+     padding so the actual tappable area meets the same floor,
+     using a transparent box-shadow to expand the hit area without
+     changing the dot's own layout/spacing. */
+  .case-gallery__arrow { width: 44px; height: 44px; }
+  .case-gallery__arrow svg { width: 20px; height: 20px; }
+  /* Default 6px gap between 5px dots (11px pitch) is too tight for any
+     real touch hit-zone without adjacent zones overlapping and causing
+     taps to register on the wrong dot — widen the gap first, then give
+     each dot a hit-zone sized to fit the new pitch with a safety margin.
+     box-shadow doesn't expand tappable area (visual only); a ::before
+     sized to the actual box does, since taps within it register on the
+     host span. */
+  .case-gallery__dots { gap: var(--sp-4); }
+  .case-gallery__dots span { position: relative; }
+  .case-gallery__dots span::before {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 18px;
+    height: 28px;
+    transform: translate(-50%, -50%);
+  }
 }
 
 /* =========================================================
